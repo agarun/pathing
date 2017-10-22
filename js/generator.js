@@ -63,7 +63,7 @@ class MazeGenerator {
     // that choice must not connect with a previously visited node
     // (1) observe the frontier to the current cell
     // (2) compare the edge weights & set the minimum cell
-    let newEdge = new Edge(null, null, 1); // dummy edge, no weight to compare against
+    let newEdge = new Edge(null, null, 1); // dummy edge, outside maximum weight
     for (let i = 0; i < this.frontier.length; i += 1) {
       if (this.frontier[i].nodeFrom.discovered && this.frontier[i].nodeTo.discovered) {
         this.frontier.splice(i, 1);
@@ -97,7 +97,7 @@ class MazeGenerator {
     // color the edge from the previous node to nodeTo
     // a gradient of 20 colors determines the fill color
     let colorStep = (Object.keys(this.tree).length / CNS.PROGRESS);
-    colorStep = ((Math.ceil(colorStep * 20)) / 20).toFixed(2);
+    colorStep = ((Math.ceil(colorStep * 20)) / 20).toFixed(2); // round to nearest .05
     this.draw.drawEdge(newEdge, colorStep);
     this.draw.drawNode(newEdge.nodeTo, colorStep);
   }
@@ -130,9 +130,7 @@ class MazeGenerator {
         clearInterval(timer);
       }
     }, time);
-
-    console.log(this.tree);
-    return this.tree;
+    return timer; // access to setInterval ID to permit clearInterval in other scopes
   }
 }
 
