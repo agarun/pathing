@@ -23,7 +23,7 @@ class BreadthFirstSearch {
     const timer = setInterval(() => {
       if (this.queue.length) {
         const currentNode = this.queue.shift(); // node position representation
-
+        console.log(currentNode, target);
         if (currentNode === target) {
           // FIXME: doesnt draw very last edge if it's horizontal,
           // because the interval is cleared before drawVisit() completes its work
@@ -56,7 +56,7 @@ class BreadthFirstSearch {
   }
 
   path() {
-    console.log(this.meta);
+    //
     let predecessor = this.target;
 
     while (predecessor !== this.source) {
