@@ -15,9 +15,8 @@ class MazeGenerator {
 
     // minimum spanning tree (MST) -> all the edges of our edge-weighted, undirected
     // graph that connects all the vertices with the minimum possible total edge weight
-    // this is a subset of this.graph.collection
-    // represented by an adjacency list in an object, where the key is the node
-    // identifier & the value is an array of neighbors
+    // this is a subset of this.graph.collection represented by an adjacency list
+    // in an object, where the key is the node identifier & the value is an array of neighbors
     this.tree = {};
   }
 
@@ -108,7 +107,7 @@ class MazeGenerator {
     // our minimum spanning tree's root is this top-left node:
     const firstNode = this.graph.collection[0][0];
     this.tree[`${firstNode.x}, ${firstNode.y}`] = [[new Edge(firstNode, firstNode, 1), firstNode]];
-    this.draw.drawNode(firstNode);
+    this.draw.drawNode(firstNode); // TODO: don't need to draw since we'll mark start/end? have to change above as well
 
     this.graph.collection[0][0].discovered = true;
 
@@ -120,7 +119,6 @@ class MazeGenerator {
     );
 
     // TODO: implement customization options
-    // IDEA: d3.timer might offer better performance
     // repeat the prims algorithm until the graph is complete
     // uses an arbitrary time interval (ms) at which to build the maze
     let progress = 0;
