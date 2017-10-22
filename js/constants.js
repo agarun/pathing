@@ -1,5 +1,5 @@
-const WIDTH = 1024;
-const HEIGHT = 640;
+const WIDTH = 1008;
+const HEIGHT = 624;
 
 const CELLSIZE = 8;
 const BLOCKWIDTH = CELLSIZE * 2;
@@ -20,16 +20,16 @@ const DIRECTIONS = {
 const PROGRESS = ((WIDTH * HEIGHT) / (BLOCKWIDTH ** 2)) - 1;
 
 const PRIMSCOLORS = {
-  0.00: "#ffffff", 0.05: '#ffffff', 0.10: '#f5fff9',
-  0.15: '#f5fff9', 0.20: '#f0fff6', 0.25: '#eafbf1',
-  0.30: '#e2fced', 0.35: '#d2fae3', 0.40: '#c7fcde',
-  0.45: '#aff6cd', 0.50: '#a0f4c4', 0.55: '#93f5bd',
-  0.60: '#7cf4b0', 0.65: '#67f6a5', 0.70: '#54ff9e',
-  0.75: '#49f694', 0.80: '#ffffff', 0.85: '#ffffff',
-  0.90: '#ffffff', 0.95: '#ffffff', 1.00: '#ffffff',
+  0.00: "#f5fff9", 0.05: '#e4feef', 0.10: '#dbf7e7',
+  0.15: '#c9fade', 0.20: '#bcf7d6', 0.25: '#b2f6d0',
+  0.30: '#a9fcce', 0.35: '#98f5c1', 0.40: '#8effbf',
+  0.45: '#82fcb8', 0.50: '#7ffcb7', 0.55: '#66fca7',
+  0.60: '#55fb9d', 0.65: '#49ff98', 0.70: '#39f68b',
+  0.75: '#38fc8d', 0.80: '#30fb88', 0.85: '#27fb83',
+  0.90: '#1cfc7d', 0.95: '#1cfc7d', 1.00: '#1cfc7d',
 };
-const VISITCOLOR = 'rgba(249, 63, 44, 0.8)';
-const SOLUTIONCOLOR = '#120b3c'; // webpage background
+const VISITCOLOR = 'rgba(249, 63, 44, 0.8)'; // TODO: might want to remove opacity
+const SOLUTIONCOLOR = '#ffe600'; // webpage background color #120b3c
 
 export {
   WIDTH,
