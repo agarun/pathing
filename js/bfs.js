@@ -46,9 +46,11 @@ class BreadthFirstSearch {
           }
         }
       } else {
-        // if the script makes it here, there was no solution
+        // if the script makes it here, there was no solution from the chosen direction
+        // FIXME: the BFS should choose the N+W direction from the source
+        // if there was no valid solution in S+E. currently, it only looks in S+E direction
         clearInterval(timer);
-        return console.log('No solution');
+        return console.log('No solution in this direction');
       }
     }, 10);
   }
@@ -58,13 +60,15 @@ class BreadthFirstSearch {
     while (predecessor !== this.source) {
       // if the next node is the source node, only draw its edge to avoid overlaps
       if (this.meta[predecessor][0][1] === this.source) {
-        this.draw.drawEdge(this.meta[predecessor][0][0]);
+        // this.draw.drawEdge(this.meta[predecessor][0][0]);
       } else {
         this.draw.drawPath(this.meta[predecessor]);
       }
       const previousNode = this.meta[predecessor][0];
       predecessor = previousNode[1];
     }
+    // overlap start/end on canvas over path line
+    this.draw.drawEnds([this.target, this.source]);
   }
 }
 
