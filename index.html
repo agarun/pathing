@@ -2,13 +2,49 @@
 <html lang="en">
   <head>
     <meta charset="UTF-8">
+    <!-- meta viewport mobile small -->
     <title>Aaron Agarunov | Projects | Pathing</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Montserrat:400,500,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
     <link rel="stylesheet" href="css/style.css" />
-    <script type="module" src="js/main.js"></script>
+
   </head>
   <body>
-    <canvas id="canvas">
-      Oops, does your browser support HTML5 Canvas?
-    </canvas>
+    <div class="wrapper">
+      <canvas id="canvas">
+        Oops, does your browser support HTML5 Canvas?
+      </canvas>
+
+      <div class="main-panel">
+        <div class="main-panel-column" id="intro">
+          <h1>Pathing</h1>
+          A demonstration of maze generation via <a href="https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_Prim.27s_algorithm">randomized Prim's algorithm</a> and maze searching via <a href="https://en.wikipedia.org/wiki/Breadth-first_search">breadth-first</a> and <a href="https://en.wikipedia.org/wiki/Depth-first_search">depth-first</a> algorithms.
+
+        </div>
+        <div class="main-panel-column">
+          <button id="randomize">randomize</button>
+          Randomly choose <span class="start">start</span> and <span class="end">end</span> points for pathing. The corners are used by default.
+        </div>
+        <div class="main-panel-column">
+
+          <button id="bfs">breadth-first</button>
+          <button id="dfs">depth-first</button>
+            <h2>search type</h2>
+        </div>
+        <div class="main-panel-column">
+          <button id="generate">regenerate</button>
+          <button id="pause">pause</button>
+        </div>
+      </div>
+
+      <hr>
+      <h1>Method</h1>
+      <!-- TODO list
+        New section here with drop shadow
+        Notes on Prim's
+        Notes on BFS, DFS, and BFS vs DFS. DFS not shortest, etc.
+      -->
+    </div>
+    <script type="module" src="js/main.js"></script>
   </body>
 </html>
