@@ -60,6 +60,11 @@ function defaultStartAndEnd() {
 }
 
 function randomize() {
+  // prohibit changing start/end coords while a search is in progress
+  if (algorithm !== undefined && algorithm.searching) {
+    return console.log('Another search is currently running, wait for that one to finish');
+  }
+
   const randomNodes = function randomNodes() {
     const nodes = Object.keys(mst);
     const pick = n => n[Math.floor(Math.random() * n.length)];
@@ -74,16 +79,21 @@ function randomize() {
     return [choiceOne, choiceTwo];
   };
 
-  if (mst.progress === CNS.PROGRESS && !searching) { // generated but not searching
+  if (mst.progress === CNS.PROGRESS) {
     [start, end] = randomNodes();
     ctx.putImageData(graph.image, 0, 0);
     draw.drawEnds([start, end]);
   }
 }
 
-// TODO: prohibit running search while another search is currently running
+let algorithm;
 function doSearch() {
   const id = this.id;
+
+  // prohibit running search while another search is in progress
+  if (algorithm !== undefined && algorithm.searching) {
+    return console.log('Another search is currently running, wait for that one to finish');
+  }
 
   if (graph.image !== undefined) { // maze has finished generating
     ctx.putImageData(graph.image, 0, 0);
@@ -94,7 +104,7 @@ function doSearch() {
       draw.drawEnds([start, end]); // redraw so it overlaps visually
     }
 
-    if (searching === 1) { // search was done before, reset all 'visited' states
+    if (searching === 1) { // a search was done before, reset all 'visited' states
       Object.keys(mst).forEach((position) => {
         if (mst[position].length !== undefined) mst[position].forEach(i => i[1].visited = false);
       });
@@ -102,25 +112,25 @@ function doSearch() {
 
     // TODO: programatically trigger different search algorithms
     if (id === 'bfs') {
-      const searchGraph = new BreadthFirstSearch(
+      algorithm = new BreadthFirstSearch(
         canvas,
         mst,
         start,
         end,
       );
-      searchGraph.search();
+      algorithm.search();
     } else if (id === 'dfs') {
-      const searchGraph = new DepthFirstSearch(
+      algorithm = new DepthFirstSearch(
         canvas,
         mst,
         start,
         end,
       );
-      searchGraph.search();
+      algorithm.search();
     }
   } else {
     console.log("Can't search before building a maze");
   }
   console.log(mst); // temp, remove
-  searching = 1;
+  searching = 1; // the algorithm's setInterval is in effect
 }

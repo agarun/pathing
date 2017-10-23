@@ -8,9 +8,11 @@ class BreadthFirstSearch {
     this.target = target;
     this.queue = [];
     this.meta = {}; // limited spanning tree object used solely for path information
+    this.searching = 0;
   }
 
   search() {
+    this.searching = 1; // start search
     const graph = this.graph;
     const source = this.source;
     const target = this.target;
@@ -61,8 +63,9 @@ class BreadthFirstSearch {
       const previousNode = this.meta[predecessor][0];
       predecessor = previousNode[1];
     }
-    // overlap start/end on canvas over path line
+    // overlap start/end on canvas over path line. TODO: redraw on animation start as well
     this.draw.drawEnds([this.target, this.source]);
+    this.searching = 0; // end search
   }
 }
 
