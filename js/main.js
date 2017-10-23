@@ -18,12 +18,14 @@ document.getElementById('dfs').addEventListener('click', doSearch, false);
 document.getElementById('generate').addEventListener('click', generate, false);
 document.getElementById('randomize').addEventListener('click', randomize, false);
 
-let searching;
 let generating;
-
 let graph;
 let mst;
 let intervalId;
+
+let searching;
+let start;
+let end;
 
 function generate() {
   // flush the canvas
@@ -48,10 +50,8 @@ function generate() {
 
   searching = 0;
   generating = 0;
+  [start, end] = [undefined, undefined];
 }
-
-let start;
-let end;
 
 function defaultStartAndEnd() {
   start = '0, 0';
@@ -74,23 +74,24 @@ function randomize() {
     return [choiceOne, choiceTwo];
   };
 
-  if (mst.progress === CNS.PROGRESS) {
+  if (mst.progress === CNS.PROGRESS && !searching) { // generated but not searching
     [start, end] = randomNodes();
     ctx.putImageData(graph.image, 0, 0);
     draw.drawEnds([start, end]);
   }
 }
 
+// TODO: prohibit running search while another search is currently running
 function doSearch() {
   const id = this.id;
 
-  if (graph.image !== undefined) {
+  if (graph.image !== undefined) { // maze has finished generating
     ctx.putImageData(graph.image, 0, 0);
 
     if (start === undefined || end === undefined) {
       defaultStartAndEnd();
     } else {
-      draw.drawEnds([start, end]); // redraw
+      draw.drawEnds([start, end]); // redraw so it overlaps visually
     }
 
     if (searching === 1) { // search was done before, reset all 'visited' states
@@ -120,6 +121,6 @@ function doSearch() {
   } else {
     console.log("Can't search before building a maze");
   }
-  console.log(mst);
+  console.log(mst); // temp, remove
   searching = 1;
 }
