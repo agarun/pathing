@@ -4,10 +4,11 @@ class Draw {
   constructor(canvas, ctx) {
     this.canvas = canvas;
     this.ctx = ctx;
+    this.drawn = {};
   }
 
-  drawEdge(edge, colorStep) {
-    this.ctx.fillStyle = CNS.PRIMSCOLORS[colorStep];
+  drawEdge(edge, colorStep, customColor) {
+    this.ctx.fillStyle = customColor || CNS.PRIMSCOLORS[colorStep];
     this.ctx.fillRect(
       ((edge.nodeFrom.x + edge.nodeTo.x) / 2), // edge is in btwn nodeFrom & nodeTo
       ((edge.nodeFrom.y + edge.nodeTo.y) / 2),
@@ -15,28 +16,31 @@ class Draw {
     );
   }
 
-  drawNode(node, colorStep) {
-    this.ctx.fillStyle = colorStep === undefined ? '#fff' : CNS.PRIMSCOLORS[colorStep];
+  drawNode(node, colorStep, customColor) {
+    this.ctx.fillStyle = customColor || CNS.PRIMSCOLORS[colorStep];
     this.ctx.fillRect(node.x, node.y, CNS.CELLSIZE, CNS.CELLSIZE);
   }
 
-  drawPath(nodes, style) {
+  drawPath(nodes, style, force) {
     this.ctx.fillStyle = style === 'visit' ? CNS.VISITCOLOR : CNS.SOLUTIONCOLOR;
     nodes.forEach((node) => {
+      const edgeId = `${node[0].nodeFrom.x} ${node[0].nodeFrom.y} ${node[0].nodeTo.x} ${node[0].nodeTo.y}`;
+      if (!this.drawn[edgeId] || force) this.drawEdge(node[0]);
+      this.drawn[edgeId] = true;
+
       let x;
       let y;
       style === 'visit' ? ({x, y} = node[1]) : ([x, y] = node[1].split(', '));
-      this.ctx.fillRect(x, y, CNS.CELLSIZE, CNS.CELLSIZE);
-      this.ctx.fillRect(
-        ((node[0].nodeFrom.x + node[0].nodeTo.x) / 2), // edge is in btwn nodeFrom & nodeTo
-        ((node[0].nodeFrom.y + node[0].nodeTo.y) / 2),
-        CNS.CELLSIZE, CNS.CELLSIZE,
-      );
+      const nodeId = `${x} | ${y}`;
+      if (!this.drawn[nodeId] || force) {
+        this.ctx.fillRect(x, y, CNS.CELLSIZE, CNS.CELLSIZE);
+        this.drawn[nodeId] = true;
+      }
     });
   }
 
   // TODO: DRY
-  drawSpecial(nodes) {
+  drawEnds(nodes) {
     const startAndEnd = nodes.map(node => node.split(', '));
     this.ctx.strokeStyle = CNS.SOLUTIONCOLOR;
     this.ctx.lineWidth = 4;
