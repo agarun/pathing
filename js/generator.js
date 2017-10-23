@@ -4,7 +4,8 @@ import * as CNS from './constants.js';
 
 class MazeGenerator {
   constructor(canvas) {
-    this.draw = new Draw(canvas, canvas.getContext('2d'));
+    this.ctx = canvas.getContext('2d');
+    this.draw = new Draw(canvas, this.ctx);
 
     // undirected graph to which we will add random edge weights
     this.graph = new Graph();
@@ -22,6 +23,8 @@ class MazeGenerator {
 
   grid() {
     // initialize & build the maze grid points
+    // the grid points are coded in a `..-Node-Edge-Node-Edge-..` pattern
+    // in each direction. the MST will be a subgraph of this pattern
     const graph = this.graph;
     for (let r = 0; r < CNS.NUMROWS; r += 1) {
       graph.collection[r] = [];
@@ -63,6 +66,7 @@ class MazeGenerator {
     // that choice must not connect with a previously visited node
     // (1) observe the frontier to the current cell
     // (2) compare the edge weights & set the minimum cell
+    // FIXME: rare silent/harmless error: Cannot set property 'discovered' of null
     let newEdge = new Edge(null, null, 1); // dummy edge, outside maximum weight
     for (let i = 0; i < this.frontier.length; i += 1) {
       if (this.frontier[i].nodeFrom.discovered && this.frontier[i].nodeTo.discovered) {
@@ -85,17 +89,26 @@ class MazeGenerator {
     });
 
     // the computer will walk to `nodeTo` in some direction. add nodeTo as a new
-    // neighbor of nodeFrom. note nodeFrom can have multiple neighbors in a maze!
+    // neighbor of nodeFrom. note nodeFrom can have multiple neighbors in a maze
     const currentPos = `${newEdge.nodeFrom.x}, ${newEdge.nodeFrom.y}`;
+    const nextPos = `${newEdge.nodeTo.x}, ${newEdge.nodeTo.y}`;
 
-    // each grid node shown by [edge, node] where edge is the passage to the next node
+    // each grid node stores a neighbor in the format [edge, node] where the edge
+    // is the passage to the next node. since this is an undirected graph, the
+    // currentPos has a neighbor nextPos, and the nextPos has a neighbor currentPos.
+    // if this was a directed graph, omit one of the ternaries - observe that
+    // dead-ends will be very common when using random extremes, since the
+    // search algorithm isn't allowed to look in an 'opposite' direction
     this.tree[currentPos] === undefined
       ? this.tree[currentPos] = [[newEdge, newEdge.nodeTo]]
       : this.tree[currentPos].push([newEdge, newEdge.nodeTo]);
+    this.tree[nextPos] === undefined
+      ? this.tree[nextPos] = [[newEdge, newEdge.nodeFrom]]
+      : this.tree[nextPos].push([newEdge, newEdge.nodeFrom]);
 
     // color in the node since it was (1) visited and (2) added, and
-    // color the edge from the previous node to nodeTo
-    // a gradient of 20 colors determines the fill color
+    // color the edge from the previous node to nodeTo, based on # of nodes.
+    // a gradient of 20 colors determines the fill color for the extent of progress
     let colorStep = (Object.keys(this.tree).length / CNS.PROGRESS);
     colorStep = ((Math.ceil(colorStep * 20)) / 20).toFixed(2); // round to nearest .05
     this.draw.drawEdge(newEdge, colorStep);
@@ -105,9 +118,9 @@ class MazeGenerator {
   build() {
     // we'll start building from the node at top-left corner.
     // our minimum spanning tree's root is this top-left node:
-    const firstNode = this.graph.collection[0][0];
-    this.tree[`${firstNode.x}, ${firstNode.y}`] = [[new Edge(firstNode, firstNode, 1), firstNode]];
-    this.draw.drawNode(firstNode); // TODO: don't need to draw since we'll mark start/end? have to change above as well
+    const firstNode = this.graph.collection[0][0];+
+    this.draw.drawNode(firstNode, null, CNS.PRIMSCOLORS[0.00]);
+    // this.tree[`${firstNode.x}, ${firstNode.y}`] = [[new Edge(firstNode, firstNode, 1), firstNode]];
 
     this.graph.collection[0][0].discovered = true;
 
@@ -118,16 +131,16 @@ class MazeGenerator {
       this.graph.collection[0][0].neighbors[CNS.DIRECTIONS.EAST],
     );
 
-    // TODO: implement customization options
     // repeat the prims algorithm until the graph is complete
     // uses an arbitrary time interval (ms) at which to build the maze
-    let progress = 0;
+    this.tree.progress = 0;
     const time = 0;
     const timer = setInterval(() => {
       this.prims();
-      progress += 1;
-      if (progress === CNS.PROGRESS) { // every node in graph.collection is discovered
+      this.tree.progress += 1;
+      if (this.tree.progress === CNS.PROGRESS) { // every node in graph.collection is discovered
         clearInterval(timer);
+        this.image = this.ctx.getImageData(0, 0, CNS.WIDTH, CNS.HEIGHT);
       }
     }, time);
     return timer; // access to setInterval ID to permit clearInterval in other scopes
