@@ -11,7 +11,7 @@ canvas.width = CNS.WIDTH;
 canvas.height = CNS.HEIGHT;
 
 document.addEventListener('DOMContentLoaded', () => {
-    generate();
+    generate(); // on page load
 }, false);
 document.getElementById('bfs').addEventListener('click', doSearch, false);
 document.getElementById('dfs').addEventListener('click', doSearch, false);
@@ -45,6 +45,7 @@ function generate() {
 
   // TODO: when generation is complete,
   // TODO: vibrate or flash the buttons 'bfs' and 'dfs'
+
   searching = 0;
   generating = 0;
 }
@@ -55,7 +56,7 @@ let end;
 function defaultStartAndEnd() {
   start = '0, 0';
   end = `${CNS.WIDTH - CNS.BLOCKWIDTH}, ${CNS.HEIGHT - CNS.BLOCKWIDTH}`;
-  draw.drawSpecial([start, end]);
+  draw.drawEnds([start, end]);
 }
 
 function randomize() {
@@ -76,31 +77,29 @@ function randomize() {
   if (mst.progress === CNS.PROGRESS) {
     [start, end] = randomNodes();
     ctx.putImageData(graph.image, 0, 0);
-    draw.drawSpecial([start, end]);
+    draw.drawEnds([start, end]);
   }
 }
 
 function doSearch() {
   const id = this.id;
 
-  // if a solution is already present, reload the canvas. TODO: HANDLE DUPES FIRST
-  // if (graph.image !== undefined)
-  console.log(mst);
-
   if (graph.image !== undefined) {
     ctx.putImageData(graph.image, 0, 0);
 
-    // FIXME: lodash deepClone alternative fails here because of circular references
-    if (searching === 1) { // search was done before
+    if (start === undefined || end === undefined) {
+      defaultStartAndEnd();
+    } else {
+      draw.drawEnds([start, end]); // redraw
+    }
+
+    if (searching === 1) { // search was done before, reset all 'visited' states
       Object.keys(mst).forEach((position) => {
         if (mst[position].length !== undefined) mst[position].forEach(i => i[1].visited = false);
       });
     }
 
-    if (start === undefined || end === undefined) {
-      defaultStartAndEnd();
-    }
-
+    // TODO: programatically trigger different search algorithms
     if (id === 'bfs') {
       const searchGraph = new BreadthFirstSearch(
         canvas,
@@ -121,10 +120,6 @@ function doSearch() {
   } else {
     console.log("Can't search before building a maze");
   }
-
+  console.log(mst);
   searching = 1;
 }
-
-// webpack bundlejs + minify + figure out about ./stuff.js imports
-// babel better or nah?
-// whats' up w imports :/
