@@ -47,8 +47,7 @@ class DepthFirstSearch {
         }
       } else {
         // if the script makes it here, there was no solution from the chosen direction
-        // FIXME: the BFS should choose the N+W direction from the source
-        // if there was no valid solution in S+E. currently, it only looks in S+E direction
+        // practically, this should be impossible, since MSTs connect _all_ vertices!
         clearInterval(timer);
         return console.log('No solution in this direction');
       }
@@ -58,12 +57,7 @@ class DepthFirstSearch {
   path() {
     let predecessor = this.target;
     while (predecessor !== this.source) {
-      // if the next node is the source node, only draw its edge to avoid overlaps
-      if (this.meta[predecessor][0][1] === this.source) {
-        // this.draw.drawEdge(this.meta[predecessor][0][0]);
-      } else {
-        this.draw.drawPath(this.meta[predecessor]);
-      }
+      this.draw.drawPath(this.meta[predecessor], false, true);
       const previousNode = this.meta[predecessor][0];
       predecessor = previousNode[1];
     }
