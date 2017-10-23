@@ -6,9 +6,14 @@ body {
   font-weight: 400;
   line-height: 1.4;
   letter-spacing: 0.02em;
-  background-color: #120b3c;
+  background-color: #2a1d78;
   color: #e6e6e6;
-  margin: 2% 0 0 0;
+  margin: 0 0 200px 0;
+}
+
+canvas {
+  display: block;
+  padding-bottom: 10px;
 }
 
 h1 {
@@ -29,6 +34,21 @@ h2 {
   text-align: center;
 }
 
+h3 {
+  display: block;
+  font-family: 'Montserrat', sans-serif;
+  font-size: 1.1em;
+  font-weight: 500;
+  letter-spacing: 0.02em;
+  color: #cbc5eb;
+  text-decoration: none;
+  text-transform: uppercase;
+}
+
+h3::after {
+  content: '\0020\2014';
+}
+
 a {
   color: #a894b1;
   font-weight: 500;
@@ -41,9 +61,15 @@ a:hover {
   border-bottom: 2px #6e5d75 solid;
 }
 
-.wrapper {
-  height: 100vh;
+.canvas-wrapper {
+  background-color: #120b3c;
+  box-shadow: 0 10px 80px -2px rgba(0, 0, 0, 0.5);
+}
+
+.container {
   max-width: 1008px;
+
+  padding: 2% 0 1% 0;
   margin: 0 auto;
 }
 
@@ -74,17 +100,12 @@ hr {
   box-shadow: 0px -1px 0px 0px #000;
   background-color: #37315d;
   color: #5a516c;
-  margin: 3em auto;
-}
-
-canvas {
-  display: block;
-  padding-bottom: 10px;
+  margin: 2em auto;
 }
 
 button {
   display: block;
-  background: #f09d18;
+  background: #f09d18; /* #ff9453 */
   font-family: 'Montserrat', sans-serif;
   font-size: 0.74em;
   font-weight: 700;
@@ -98,19 +119,14 @@ button {
 }
 
 button:hover {
-  /*TODO: fancy stuff + animation, i think google had some stuff about this */
+  /* TODO: ripple animation */
   background: #ffc05c;
   transition: 0.2s ease-out;
 }
 
-/* TODO:
- Github icons etc
- */
-
- /* INSPO */
- /* https://www.instagram.com/thedesigntip/
- https://www.instagram.com/trianbampol/*/
- /*senna soundtrack cover*/
+.readme h1 {
+  padding-top: 1em;
+}
 
 .start {
   color: #80ee12;
@@ -118,4 +134,19 @@ button:hover {
 
 .end {
   color: #e70068;
+}
+
+.footer {
+  color: #120b3c;
+  /* TODO:
+  Maze design SVG on bottom of page, keep in CSS
+  */
+}
+
+.footer p {
+  text-align: center;
+}
+
+.footer a {
+  margin: 0 5px;
 }
