@@ -30,6 +30,8 @@ const PRIMSCOLORS = {
 };
 const VISITCOLOR = 'rgba(249, 63, 44, 0.8)'; // TODO: might want to remove opacity
 const SOLUTIONCOLOR = '#ffe600'; // webpage background color #120b3c
+const STARTCOLOR = '#80ee12';
+const ENDCOLOR = '#e70068';
 
 export {
   WIDTH,
@@ -43,4 +45,6 @@ export {
   PRIMSCOLORS,
   VISITCOLOR,
   SOLUTIONCOLOR,
+  STARTCOLOR,
+  ENDCOLOR,
 };

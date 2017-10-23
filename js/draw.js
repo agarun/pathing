@@ -34,6 +34,25 @@ class Draw {
       );
     });
   }
+
+  // TODO: DRY
+  drawSpecial(nodes) {
+    const startAndEnd = nodes.map(node => node.split(', '));
+    this.ctx.strokeStyle = CNS.SOLUTIONCOLOR;
+    this.ctx.lineWidth = 4;
+    this.ctx.beginPath();
+    this.ctx.fillStyle = CNS.STARTCOLOR;
+    this.ctx.arc((+startAndEnd[0][0] + (CNS.CELLSIZE / 2)), (+startAndEnd[0][1] + (CNS.CELLSIZE / 2)), (CNS.CELLSIZE / 1.2), 0, 2 * Math.PI);
+    this.ctx.closePath();
+    this.ctx.fill();
+    this.ctx.stroke();
+    this.ctx.beginPath();
+    this.ctx.fillStyle = CNS.ENDCOLOR;
+    this.ctx.arc((+startAndEnd[1][0] + (CNS.CELLSIZE / 2)), (+startAndEnd[1][1] + (CNS.CELLSIZE / 2)), (CNS.CELLSIZE / 1.2), 0, 2 * Math.PI);
+    this.ctx.closePath();
+    this.ctx.fill();
+    this.ctx.stroke();
+  }
 }
 
 export default Draw;
