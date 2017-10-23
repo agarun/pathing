@@ -23,9 +23,9 @@ let graph;
 let mst;
 let intervalId;
 
-let searching;
 let start;
 let end;
+let searched;
 
 function generate() {
   // flush the canvas
@@ -48,7 +48,9 @@ function generate() {
   // TODO: when generation is complete,
   // TODO: vibrate or flash the buttons 'bfs' and 'dfs'
 
-  searching = 0;
+  // reset prim's and search algo's states, and flush start & end points
+  if (algorithm !== undefined) algorithm.searching = 0;
+  searched = 0;
   generating = 0;
   [start, end] = [undefined, undefined];
 }
@@ -104,7 +106,7 @@ function doSearch() {
       draw.drawEnds([start, end]); // redraw so it overlaps visually
     }
 
-    if (searching === 1) { // a search was done before, reset all 'visited' states
+    if (searched === 1) { // a search was done before, reset all 'visited' states
       Object.keys(mst).forEach((position) => {
         if (mst[position].length !== undefined) mst[position].forEach(i => i[1].visited = false);
       });
@@ -118,7 +120,7 @@ function doSearch() {
         start,
         end,
       );
-      algorithm.search();
+      intervalId = algorithm.search();
     } else if (id === 'dfs') {
       algorithm = new DepthFirstSearch(
         canvas,
@@ -126,11 +128,10 @@ function doSearch() {
         start,
         end,
       );
-      algorithm.search();
+      intervalId = algorithm.search();
     }
   } else {
     console.log("Can't search before building a maze");
   }
-  console.log(mst); // temp, remove
-  searching = 1; // the algorithm's setInterval is in effect
+  searched = 1; // the algorithm's setInterval is in effect
 }

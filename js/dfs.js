@@ -54,6 +54,8 @@ class DepthFirstSearch {
         return console.log('No solution in this direction');
       }
     }, 10);
+    // access to setInterval ID to permit clearInterval if requesting generate() during search
+    return timer;
   }
 
   path() {
