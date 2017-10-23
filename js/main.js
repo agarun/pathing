@@ -18,9 +18,13 @@ document.getElementById('dfs').addEventListener('click', doSearch, false);
 document.getElementById('generate').addEventListener('click', generate, false);
 document.getElementById('randomize').addEventListener('click', randomize, false);
 
+let searching;
+let generating;
+
 let graph;
 let mst;
 let intervalId;
+
 function generate() {
   // flush the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
@@ -41,6 +45,8 @@ function generate() {
 
   // TODO: when generation is complete,
   // TODO: vibrate or flash the buttons 'bfs' and 'dfs'
+  searching = 0;
+  generating = 0;
 }
 
 let start;
@@ -67,46 +73,56 @@ function randomize() {
     return [choiceOne, choiceTwo];
   };
 
-  // TODO: don't do this if maze search is already running
-  [start, end] = randomNodes(); // TODO: catch exceptions here
-  ctx.putImageData(graph.image, 0, 0)
-  draw.drawSpecial([start, end]);
-  console.log(start, end);
+  if (mst.progress === CNS.PROGRESS) {
+    [start, end] = randomNodes();
+    ctx.putImageData(graph.image, 0, 0);
+    draw.drawSpecial([start, end]);
+  }
 }
 
 function doSearch() {
   const id = this.id;
 
-  // if a solution is already present, reload the canvas
-  if (graph.image !== undefined) ctx.putImageData(graph.image, 0, 0);
+  // if a solution is already present, reload the canvas. TODO: HANDLE DUPES FIRST
+  // if (graph.image !== undefined)
+  console.log(mst);
 
-  if (mst.progress === CNS.PROGRESS) {
+  if (graph.image !== undefined) {
+    ctx.putImageData(graph.image, 0, 0);
+
+    // FIXME: lodash deepClone alternative fails here because of circular references
+    if (searching === 1) { // search was done before
+      Object.keys(mst).forEach((position) => {
+        if (mst[position].length !== undefined) mst[position].forEach(i => i[1].visited = false);
+      });
+    }
+
     if (start === undefined || end === undefined) {
       defaultStartAndEnd();
     }
 
     if (id === 'bfs') {
-      // clone MST so we don't mutate the original
-      const graph = new BreadthFirstSearch(
+      const searchGraph = new BreadthFirstSearch(
         canvas,
         mst,
         start,
         end,
       );
-      graph.search();
+      searchGraph.search();
     } else if (id === 'dfs') {
-      // clone MST so we don't mutate the original
-      const graph = new DepthFirstSearch(
+      const searchGraph = new DepthFirstSearch(
         canvas,
         mst,
         start,
         end,
       );
-      graph.search();
+      searchGraph.search();
     }
   } else {
     console.log("Can't search before building a maze");
   }
+
+  searching = 1;
 }
 
 // webpack bundlejs + minify + figure out about ./stuff.js imports
