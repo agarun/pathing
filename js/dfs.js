@@ -26,6 +26,9 @@ class DepthFirstSearch {
         const currentNode = stack.pop(); // node position representation
         this.draw.drawPath(graph[currentNode], 'visit');
 
+        // redraw start & end on first walk to overlap path for visibility
+        if (!Object.keys(meta).length) this.draw.drawEnds([source, target]);
+
         // grab each neighbor node of the current cell
         // graph[currentNode][i][0] is the edge to the graph[currentNode][i][1] node
         // i.e. the neighbors in the adj. list are represented by [[edge, node], ..]
@@ -65,9 +68,10 @@ class DepthFirstSearch {
       const previousNode = this.meta[predecessor][0];
       predecessor = previousNode[1];
     }
-    // overlap start/end on canvas over path line
-    this.draw.drawEnds([this.target, this.source]);
-    this.searching = 0; // end search
+    // redraw start & end on solution backtrace to overlap path for visibility
+    this.draw.drawEnds([this.source, this.target]);
+    // end search state
+    this.searching = 0;
   }
 }
 
