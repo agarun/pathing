@@ -1,5 +1,3 @@
-/* TODO: Loading bar / Status bar */
-
 body {
   font-family: 'Roboto', sans-serif;
   font-size: 16px;
@@ -124,6 +122,27 @@ button:hover {
   transition: 0.2s ease-out;
 }
 
+button:focus {
+  /* TODO: add :active effects */
+  outline: none;
+}
+
+.flash {
+  animation: flash linear 840ms 3;
+}
+
+@-webkit-keyframes flash {
+  0% { opacity: 1; }
+  50% { opacity: .3; }
+  100% { opacity: 1; }
+}
+
+@keyframes flash {
+  0% { opacity: 1; }
+  50% { opacity: .3; }
+  100% { opacity: 1; }
+}
+
 .readme h1 {
   padding-top: 1em;
 }
@@ -150,3 +169,5 @@ button:hover {
 .footer a {
   margin: 0 5px;
 }
+
+/* TODO: Loading bar / Status bar */
