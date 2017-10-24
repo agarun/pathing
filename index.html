@@ -1,0 +1,69 @@
+<!DOCTYPE HTML>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8">
+    <!-- TODO: meta viewport mobile small -->
+    <title>Aaron Agarunov | Projects | Pathing</title>
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Montserrat:400,500,700">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/normalize/7.0.0/normalize.min.css">
+    <link rel="stylesheet" href="css/style.css" />
+
+  </head>
+  <body>
+    <div class="canvas-wrapper">
+      <div class="container">
+        <canvas id="canvas">
+          Oops, does your browser support HTML5 Canvas?
+        </canvas>
+
+        <div class="main-panel">
+          <div class="main-panel-column" id="intro">
+            <h1>Pathing</h1>
+            A demonstration of maze generation via <a href="https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_Prim.27s_algorithm">randomized Prim's algorithm</a> and maze searching via <a href="https://en.wikipedia.org/wiki/Breadth-first_search">breadth-first</a> &amp; <a href="https://en.wikipedia.org/wiki/Depth-first_search">depth-first</a> algorithms.
+
+          </div>
+          <div class="main-panel-column">
+            <button id="randomize">randomize</button>
+            Randomly choose <span class="start">start</span> and <span class="end">end</span> points for pathing. The corners are used by default.
+          </div>
+          <div class="main-panel-column">
+
+            <button id="bfs">breadth-first</button>
+            <button id="dfs">depth-first</button>
+              <h2>choose search type</h2>
+          </div>
+          <div class="main-panel-column">
+            <button id="generate">regenerate</button>
+            Make new passages in the void.
+            <!-- <button id="pause">pause</button> -->
+          </div>
+        </div>
+        <hr>
+      </div>
+    </div>
+
+      <div class="container">
+        <div class="readme">
+          <h1>Method</h1>
+          <!-- TODO list
+            Notes on Prim's
+            Notes on BFS, DFS, and BFS vs DFS. DFS not shortest, etc.
+            Images, add option with entire viewport as well at diff page and multi colors
+            Add long svg to bottom
+          -->
+          <h3>maze</h3>
+          <!-- The maze is an undirected graph. -->
+          <!-- [Readme] -->
+          <h3>search</h3>
+        </div>
+        <div class="footer">
+          <p>
+            <a href="https://agarun.com">Aaron Agarunov</a>
+            &#10022;
+            <a href="https://github.com/agarun/pathing">GitHub</a>
+          </p>
+        </div>
+      </div>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>
