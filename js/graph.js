@@ -8,11 +8,11 @@ class Graph {
 
 class Node {
   constructor(x, y) {
-    this.x = x * CNS.BLOCKWIDTH; // TODO: export cellSize
+    this.x = x * CNS.BLOCKWIDTH;
     this.y = y * CNS.BLOCKWIDTH;
     this.neighbors = []; // node's neighboring edges
     this.visited = false;
-    this.discovered = false; // not fully visited yet b/c not part of MST TODO: color
+    this.discovered = false; // true when added to MST
   }
 }
 

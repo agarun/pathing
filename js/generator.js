@@ -118,7 +118,7 @@ class MazeGenerator {
   build() {
     // we'll start building from the node at top-left corner.
     // our minimum spanning tree's root is this top-left node:
-    const firstNode = this.graph.collection[0][0];+
+    const firstNode = this.graph.collection[0][0];
     this.draw.drawNode(firstNode, null, CNS.PRIMSCOLORS[0.00]);
     // this.tree[`${firstNode.x}, ${firstNode.y}`] = [[new Edge(firstNode, firstNode, 1), firstNode]];
 
