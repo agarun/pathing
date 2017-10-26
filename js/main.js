@@ -4,14 +4,14 @@ import MazeGenerator from './generator.js';
 import Draw from './draw.js';
 import * as CNS from './constants.js';
 
-const canvas = document.getElementById("canvas");
-const ctx = canvas.getContext("2d");
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
 const draw = new Draw(canvas, canvas.getContext('2d'));
 canvas.width = CNS.WIDTH;
 canvas.height = CNS.HEIGHT;
 
 document.addEventListener('DOMContentLoaded', () => {
-    generate(); // on page load
+  generate(); // on page load
 }, false);
 document.getElementById('bfs').addEventListener('click', doSearch, false);
 document.getElementById('dfs').addEventListener('click', doSearch, false);
@@ -45,9 +45,6 @@ function generate() {
   };
   intervalId = doPrims();
 
-  // TODO: when generation is complete,
-  // TODO: vibrate or flash the buttons 'bfs' and 'dfs'
-
   // reset prim's and search algo's states, and flush start & end points
   if (algorithm !== undefined) algorithm.searching = 0;
   searched = 0;
@@ -73,8 +70,6 @@ function randomize() {
     let choiceOne;
     let choiceTwo;
     while (choiceOne === choiceTwo || choiceOne === 'progress' || choiceTwo === 'progress') {
-      // TODO: add condition to ensure the numbers aren't close together
-      // not quite random: slicing helps us avoid traveling straight into dead-ends
       choiceOne = pick(nodes.slice(0, 50));
       choiceTwo = pick(nodes.slice(1250));
     }
@@ -93,6 +88,8 @@ function doSearch() {
   const id = this.id;
 
   // prohibit running search while another search is in progress
+  // NOTE: this runs 1 search and freezes the button until it's done. to undo this feature,
+  // add algorithm.searching condition to `if (searching === 1)` to reset `visited`
   if (algorithm !== undefined && algorithm.searching) {
     return console.log('Another search is currently running, wait for that one to finish');
   }
