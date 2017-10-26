@@ -23,28 +23,28 @@ class BreadthFirstSearch {
 
     const timer = setInterval(() => {
       if (queue.length) {
-        const currentNode = queue.shift(); // node position representation
-        this.draw.drawPath(graph[currentNode], 'visit');
+        const currentNode = queue.shift();
 
+        this.draw.drawPath(graph[currentNode], 'visit');
         // redraw start & end on first walk to overlap path for visibility
         if (!Object.keys(meta).length) this.draw.drawEnds([source, target]);
 
-        // grab each neighbor node of the current cell
+        // grab each neighbor node of the current cell, format into key `x, y`
         // graph[currentNode][i][0] is the edge to the graph[currentNode][i][1] node
         // i.e. the neighbors in the adj. list are represented by [[edge, node], ..]
         const neighbors = graph[currentNode];
         for (let i = 0; i < neighbors.length; i += 1) {
           const neighbor = neighbors[i][1];
           const key = `${neighbor.x}, ${neighbor.y}`;
-          // if one of the neighbors is the target, break & draw the path
+
+          // if one of the neighbors is the target, break & draw the solution path
           if (key === target) {
-            this.draw.drawPath(graph[currentNode], 'visit');
             meta[key] = [[graph[currentNode][i][0], currentNode]];
             clearInterval(timer);
             return this.path();
           }
 
-          if (!neighbor.visited && graph[`${neighbor.x}, ${neighbor.y}`]) {
+          if (!neighbor.visited) {
             this.queue.push(`${neighbor.x}, ${neighbor.y}`);
             neighbor.visited = true;
             meta[key] = [[graph[currentNode][i][0], currentNode]];
@@ -64,7 +64,7 @@ class BreadthFirstSearch {
   path() {
     let predecessor = this.target;
     while (predecessor !== this.source) {
-      this.draw.drawPath(this.meta[predecessor], false, true);
+      this.draw.drawPath(this.meta[predecessor], 'solution', true);
       const previousNode = this.meta[predecessor][0];
       predecessor = previousNode[1];
     }
