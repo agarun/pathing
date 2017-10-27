@@ -7,6 +7,7 @@ class Draw {
     this.drawn = {};
   }
 
+  // TODO: Modularize for better usage
   drawEdge(edge, colorStep, customColor) {
     this.ctx.fillStyle = customColor || CNS.PRIMSCOLORS[colorStep];
     this.ctx.fillRect(
@@ -25,11 +26,12 @@ class Draw {
     this.ctx.fillStyle = style === 'visit' ? CNS.VISITCOLOR : CNS.SOLUTIONCOLOR;
     nodes.forEach((node) => {
       const edgeId = `${node[0].nodeFrom.x} ${node[0].nodeFrom.y} ${node[0].nodeTo.x} ${node[0].nodeTo.y}`;
-      if (!this.drawn[edgeId] || force) this.drawEdge(node[0]);
-      this.drawn[edgeId] = true;
+      if (!this.drawn[edgeId] || force) {
+        this.drawEdge(node[0]);
+        this.drawn[edgeId] = true;
+      }
 
-      let x;
-      let y;
+      let x, y;
       style === 'visit' ? ({x, y} = node[1]) : ([x, y] = node[1].split(', '));
       const nodeId = `${x} | ${y}`;
       if (!this.drawn[nodeId] || force) {
