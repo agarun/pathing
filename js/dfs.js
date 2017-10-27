@@ -2,6 +2,7 @@ import Draw from './draw.js';
 
 class DepthFirstSearch {
   constructor(canvas, graph, source, target) {
+    this.canvas = canvas; // temporary
     this.draw = new Draw(canvas, canvas.getContext('2d'));
     this.graph = graph;
     this.source = source;
@@ -24,8 +25,13 @@ class DepthFirstSearch {
     const timer = setInterval(() => {
       if (stack.length) {
         const currentNode = stack.pop(); // node position representation
-        this.draw.drawPath(graph[currentNode], 'visit');
 
+        // draw the current node being visited and the passage used to get there
+        // FIXME: use 'visit' with drawPath but feed in array slices not properties
+        // TODO: test if this is necessary in BFS
+        this.canvas.getContext('2d').fillStyle = 'rgba(249, 63, 44, 0.8)';
+        this.canvas.getContext('2d').fillRect(currentNode.split(', ')[0], currentNode.split(', ')[1], 8, 8);
+        if (Object.keys(meta).length) this.draw.drawEdge(meta[currentNode][0][0], null, 'visit');
         // redraw start & end on first walk to overlap path for visibility
         if (!Object.keys(meta).length) this.draw.drawEnds([source, target]);
 
@@ -44,14 +50,14 @@ class DepthFirstSearch {
             return this.path();
           }
 
-          if (!neighbor.visited && graph[`${neighbor.x}, ${neighbor.y}`]) {
+          if (!neighbor.visited) {
             this.stack.push(`${neighbor.x}, ${neighbor.y}`);
             neighbor.visited = true;
             meta[key] = [[graph[currentNode][i][0], currentNode]];
           }
         }
       } else {
-        // if the script makes it here, there was no solution from the chosen direction
+        // if the script makes it here, there was no solution
         // practically, this should be impossible, since MSTs connect _all_ vertices!
         clearInterval(timer);
         return console.log('No solution in this direction');
@@ -64,7 +70,7 @@ class DepthFirstSearch {
   path() {
     let predecessor = this.target;
     while (predecessor !== this.source) {
-      this.draw.drawPath(this.meta[predecessor], false, true);
+      this.draw.drawPath(this.meta[predecessor], 'solution', true);
       const previousNode = this.meta[predecessor][0];
       predecessor = previousNode[1];
     }
