@@ -9,11 +9,11 @@ class DepthFirstSearch {
     this.target = target;
     this.stack = [];
     this.meta = {}; // limited spanning tree object used solely for path information
-    this.searching = 0;
+    this.searching = 0; // 1: performing search, 0: waiting to search
   }
 
   search() {
-    this.searching = 1; // start search
+    this.searching = 1;
     const graph = this.graph;
     const source = this.source;
     const target = this.target;
@@ -26,14 +26,10 @@ class DepthFirstSearch {
       if (stack.length) {
         const currentNode = stack.pop(); // node position representation
 
-        // draw the current node being visited and the passage used to get there
-        // FIXME: use 'visit' with drawPath but feed in array slices not properties
-        // TODO: test if this is necessary in BFS
-        this.canvas.getContext('2d').fillStyle = 'rgba(249, 63, 44, 0.8)';
-        this.canvas.getContext('2d').fillRect(currentNode.split(', ')[0], currentNode.split(', ')[1], 8, 8);
-        if (Object.keys(meta).length) this.draw.drawEdge(meta[currentNode][0][0], null, 'visit');
-        // redraw start & end on first walk to overlap path for visibility
-        if (!Object.keys(meta).length) this.draw.drawEnds([source, target]);
+        // draw the current node being visited and the passage that was used to get there
+        if (Object.keys(meta).length) {
+          this.draw.drawPath([[meta[currentNode][0][0], currentNode]], 'visit');
+        }
 
         // grab each neighbor node of the current cell
         // graph[currentNode][i][0] is the edge to the graph[currentNode][i][1] node
@@ -42,9 +38,10 @@ class DepthFirstSearch {
         for (let i = 0; i < neighbors.length; i += 1) {
           const neighbor = neighbors[i][1];
           const key = `${neighbor.x}, ${neighbor.y}`;
+
           // if one of the neighbors is the target, break & draw the path
           if (key === target) {
-            this.draw.drawPath(graph[currentNode], 'visit');
+            this.draw.drawNode(key);
             meta[key] = [[graph[currentNode][i][0], currentNode]];
             clearInterval(timer);
             return this.path();
@@ -57,13 +54,13 @@ class DepthFirstSearch {
           }
         }
       } else {
-        // if the script makes it here, there was no solution
-        // practically, this should be impossible, since MSTs connect _all_ vertices!
+        // practically, executing `else` should be impossible, since MSTs connect *all* vertices
         clearInterval(timer);
         return console.log('No solution in this direction');
       }
     }, 10);
-    // access to setInterval ID to permit clearInterval if requesting generate() during search
+    // allow choosing new search type while a search is running: return access to
+    // setInterval ID to permit clearInterval if calling generateMaze() during a search
     return timer;
   }
 
@@ -74,9 +71,8 @@ class DepthFirstSearch {
       const previousNode = this.meta[predecessor][0];
       predecessor = previousNode[1];
     }
-    // redraw start & end on solution backtrace to overlap path for visibility
+    // redraw start & end on the solution backtrace to overlap the path for visibility
     this.draw.drawEnds([this.source, this.target]);
-    // end search state
     this.searching = 0;
   }
 }
