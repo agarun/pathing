@@ -8,11 +8,11 @@ class BreadthFirstSearch {
     this.target = target;
     this.queue = [];
     this.meta = {}; // limited spanning tree object used solely for path information
-    this.searching = 0;
+    this.searching = 0; // 1: performing search, 0: waiting to search
   }
 
   search() {
-    this.searching = 1; // start search
+    this.searching = 1;
     const graph = this.graph;
     const source = this.source;
     const target = this.target;
@@ -25,9 +25,9 @@ class BreadthFirstSearch {
       if (queue.length) {
         const currentNode = queue.shift();
 
-        this.draw.drawPath(graph[currentNode], 'visit');
-        // redraw start & end on first walk to overlap path for visibility
-        if (!Object.keys(meta).length) this.draw.drawEnds([source, target]);
+        if (Object.keys(meta).length) {
+          this.draw.drawPath(graph[currentNode], 'visit');
+        }
 
         // grab each neighbor node of the current cell, format into key `x, y`
         // graph[currentNode][i][0] is the edge to the graph[currentNode][i][1] node
@@ -51,13 +51,13 @@ class BreadthFirstSearch {
           }
         }
       } else {
-        // if the script makes it here, there was no solution from the chosen direction
-        // practically, this should be impossible, since MSTs connect _all_ vertices!
+        // practically, executing `else` should be impossible, since MSTs connect *all* vertices
         clearInterval(timer);
         return console.log('No solution in this direction');
       }
     }, 10);
-    // access to setInterval ID to permit clearInterval if requesting generate() during search
+    // allow choosing new search type while a search is running: return access to
+    // setInterval ID to permit clearInterval if calling generateMaze() during a search
     return timer;
   }
 
@@ -68,9 +68,8 @@ class BreadthFirstSearch {
       const previousNode = this.meta[predecessor][0];
       predecessor = previousNode[1];
     }
-    // redraw start & end on solution backtrace to overlap path for visibility
+    // redraw start & end on the solution backtrace to overlap the path for visibility
     this.draw.drawEnds([this.source, this.target]);
-    // end search state
     this.searching = 0;
   }
 }
