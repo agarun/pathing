@@ -7,7 +7,6 @@ class Draw {
     this.drawn = {};
   }
 
-  // TODO: Modularize for better usage
   drawEdge(edge, colorStep, customColor) {
     this.ctx.fillStyle = customColor || CNS.PRIMSCOLORS[colorStep];
     this.ctx.fillRect(
@@ -18,21 +17,21 @@ class Draw {
   }
 
   drawNode(node, colorStep, customColor) {
+    const [x, y] = Draw.destructurePosition(node);
     this.ctx.fillStyle = customColor || CNS.PRIMSCOLORS[colorStep];
-    this.ctx.fillRect(node.x, node.y, CNS.CELLSIZE, CNS.CELLSIZE);
+    this.ctx.fillRect(x, y, CNS.CELLSIZE, CNS.CELLSIZE);
   }
 
   drawPath(nodes, style, force) {
     this.ctx.fillStyle = style === 'visit' ? CNS.VISITCOLOR : CNS.SOLUTIONCOLOR;
+
     nodes.forEach((node) => {
       const edgeId = `${node[0].nodeFrom.x} ${node[0].nodeFrom.y} ${node[0].nodeTo.x} ${node[0].nodeTo.y}`;
       if (!this.drawn[edgeId] || force) {
         this.drawEdge(node[0]);
         this.drawn[edgeId] = true;
       }
-
-      let x, y;
-      style === 'visit' ? ({x, y} = node[1]) : ([x, y] = node[1].split(', '));
+      const [x, y] = Draw.destructurePosition(node[1]);
       const nodeId = `${x} | ${y}`;
       if (!this.drawn[nodeId] || force) {
         this.ctx.fillRect(x, y, CNS.CELLSIZE, CNS.CELLSIZE);
@@ -53,6 +52,13 @@ class Draw {
     this.ctx.fillRect(startAndEnd[1][0], startAndEnd[1][1], (CNS.CELLSIZE * 1.5), (CNS.CELLSIZE * 1.5));
     this.ctx.strokeRect(startAndEnd[1][0] - (CNS.CELLSIZE / 4), startAndEnd[1][1] - (CNS.CELLSIZE / 4), (CNS.CELLSIZE * 1.5), (CNS.CELLSIZE * 1.5));
     this.ctx.stroke();
+  }
+
+  static destructurePosition(nodePosition) {
+    if (typeof nodePosition === 'string' || nodePosition instanceof String) {
+      return nodePosition.split(', ');
+    }
+    return [nodePosition.x, nodePosition.y];
   }
 }
 
