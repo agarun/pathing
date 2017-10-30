@@ -17,8 +17,8 @@
 
         <div class="main-panel">
           <div class="main-panel-column" id="intro">
-            <h1>Pathing</h1> <!-- TODO: very slightly raise this heading so it's obvious on 1366x768 something's here -->
-            A demonstration of maze generation via <a href="https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_Prim.27s_algorithm">randomized Prim's algorithm</a> and maze searching via <a href="https://en.wikipedia.org/wiki/Breadth-first_search">breadth-first</a> &amp; <a href="https://en.wikipedia.org/wiki/Depth-first_search">depth-first</a> algorithms.
+            <h1>Pathing</h1>
+            A demonstration of maze generation using <a href="https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_Prim.27s_algorithm">randomized Prim's algorithm</a> and maze searching using <a href="https://en.wikipedia.org/wiki/Breadth-first_search">breadth-first</a> and <a href="https://en.wikipedia.org/wiki/Depth-first_search">depth-first</a> algorithms.
 
           </div>
           <div class="main-panel-column">
@@ -30,12 +30,12 @@
             <button id="bfs">breadth-first</button>
             <button id="dfs">depth-first</button>
             Choose a searching algorithm. You can try both and compare!
-            <!-- <h2>choose search type</h2> -->
           </div>
           <div class="main-panel-column">
             <button id="generate">regenerate</button>
             Make new passages in the void.
             <!-- <button id="pause">pause</button> -->
+
           </div>
         </div>
         <hr>
@@ -44,17 +44,47 @@
 
       <div class="container">
         <div class="readme">
-          <h1>Method</h1>
-          <!-- TODO list
-            Notes on Prim's
-            Notes on BFS, DFS, and BFS vs DFS. DFS not shortest, etc.
-            Images, add option with entire viewport as well at diff page and multi colors
-            Add long svg to bottom
-          -->
-          <h3>maze</h3>
-          <!-- The maze is an undirected graph. -->
-          <!-- [Readme] -->
-          <h3>search</h3>
+          <h1>Intro</h1>
+            <p>Interactive visualization of maze generation and graph traversal algorithms in JavaScript (ES6) and HTML5 Canvas. The maze is generated using randomized Prim's algorithm to build a minimum spanning tree based on minimum edge weights. The tree can be searched with depth-first and breadth-first traversal algorithms.</p>
+          <h1>Mazes</h1>
+            <h3>Graphs</h3>
+            <p>This demonstration considers the entire grid as a weighted, undirected graph for pathfinding. It is undirected in that each node is assigned a collection of all of its neighboring nodes and edges. It is weighted in that each edge has a random float weight between 0 and 1 (exclusive). The maze is drawn as a graph: both nodes and edges are drawn to the canvas.</p>
+
+            <h3>Prim's Algorithm</h3>
+            <p>Prim's algorithm is a greedy algorithm. It observes each node's neighbors and compares each edge's weight. Then, it chooses the passage with the <strong>local minimum edge weight</strong> as its next path and walks to the next node. As it does this, it constructs a spanning tree of all the locally optimal nodes and edges it reaches. The result is a subgraph of the original fully connected graph. This <em>minimum</em> spanning tree has the lowest possible total edge weight.</p>
+
+            <p>In randomized Prim's algorithm, the maze's edges are initialized with random edge weights. The maze is built in the direction of the local minimum edge weight (cheapest edge) at each node if and only if the extension would avoid creating a loop in the maze. In the case that Prim's compares edge weights and predicts a cycle, the next available local minimum edge weight is chosen.</p>
+
+            <p>To keep track of the cells (graph nodes) that can potentially be incorporated into the minimum spanning tree, a <strong>frontier</strong> of cells that <em>wall in</em> the current position in the tree is maintained. This frontier is repeatedly explored, evaluated, and adjusted until the spanning tree contains all of the nodes.</p>
+
+            <h3>Implementation</h3>
+            <p>The randomized Prim's algorithm is implemented classically.</p>
+
+            <p>First, a fully-connected graph is generated. Each node is assigned neighboring edges in each available direction. The <code>Edge</code> constructor initializes each edge with a random weight.</p>
+
+            <p>In Prim's algorithm, generation arbitrarily starts from the top-left corner (canvas coordinates 0, 0). The algorithm adjusts a frontier of available cells, explores it for the lowest-weighted edge, draws the current node and chosen edge, and finally extends the minimum spanning tree. When the algorithm predicts a cycle, it backtracks to the next available node based on the frontier. This is made possible by keeping the <code>discovered</code> state of each node as a property on each <code>Node</code> instance. The loop is repeated until the spanning tree contains all of the nodes in the initial graph.</p>
+
+            <p>The colors are based on the progress of maze generation. Lighter colors indicate the nodes and edges were placed earlier, and darker colors indicate late placement. Since it's very common for Prim's to run into cycles after most of the maze has been generated, you can expect to see how backtracking returns to random spots in the maze.</p>
+          <h1>Searching</h1>
+            <h3>Breadth-first</h3>
+            <p>Breadth-first search visits every node's incident edges before descending to the next level of nodes ('siblings first').</p>
+
+            <p>It is guaranteed to find the shortest path on an undirected graph. Visiting every increasingly distant node from the source eventually generates a unique path to the target with the smallest number of edges.</p>
+
+            <p>Breadth-first search is implemented with a queue, which maintains the order for traversal. Dequeueing returns the earliest added node, allowing the search to continue exploring a particular level of the graph (breadth!) before considering nodes at lower levels.</p>
+
+            <h3>Depth-first</h3>
+            <p>Depth-first search also considers the neighbors of each node. After walking to a node, the search keeps traveling to the deepest level before backtracking ('children first' - visit the parent node's children first).<p>
+
+            <p>It's implemented with a stack (explicit and iterative implementation here, but can also use an implicit stack using recursion).</p>
+
+            <p>Depth-first search is not guaranteed to find the shortest-path from the source to the target - it might terminate with a suboptimal solution.</p>
+
+            <h3>BFS versus DFS</h3>
+            <p>In the worst case, both search algorithms visit each vertex at most once and cover each edge at least once. While they have the same worst-case time (O(|V| + |E|)) and space complexity (O(|V|)), they have different applications. BFS is guaranteed to find the shortest-path solution, but might be slower to reach the solution when the target node is far from the source node. DFS can potentially be more useful when the target node is far from the source node, but it typically finds suboptimal solutions and might also traverse the entire graph.</p>
+
+            <h3>Implementation</h3>
+            <p>Both BFS and DFS have simple iterative implementations. BFS makes use of a queue while DFS makes use of a stack. JavaScript's <code>setInterval()</code> is used to repeatedly draw traversal and generation to the canvas. </code>setInterval()</code> returns an ID value that can be fed to <code>clearInterval()</code> to cancel any building paths.</p>
         </div>
         <div class="footer">
           <p>
