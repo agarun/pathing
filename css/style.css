@@ -10,7 +10,7 @@ body {
   background: #2a1d78 url(https://cdn.rawgit.com/agarun/ed6c9621f6ade8ee89e3685cd5a0eeff/raw/1f0a39094e0f2edef95175eb06a03f01779c89bd/footer.svg);
   background-position: bottom;
   background-repeat: repeat-x;
-  background-size: auto 120px;
+  background-size: auto 100px;
 }
 
 canvas {
@@ -70,7 +70,6 @@ a:hover {
 
 .container {
   max-width: 1008px;
-
   padding: 2% 0 1% 0;
   margin: 0 auto;
 }
