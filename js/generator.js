@@ -1,6 +1,6 @@
-import { Graph, Node, Edge } from './graph';
-import Draw from './draw';
-import * as CNS from './constants';
+import { Graph, Node, Edge } from './graph.js';
+import Draw from './draw.js';
+import * as CNS from './constants.js';
 
 class MazeGenerator {
   constructor(canvas) {
@@ -37,7 +37,7 @@ class MazeGenerator {
     for (let r = 0; r < CNS.NUMROWS; r += 1) {
       for (let c = 0; c < CNS.NUMCOLS; c += 1) {
         // in randomized prim's, edges ('passages') have random weights
-        // the `if` statements keep us within range. we generate weighted edges.
+        // the `if` statements keep generation within range, then assign weighted edges
         if (r !== CNS.NUMROWS - 1) {
           graph.collection[r][c].neighbors[CNS.DIRECTIONS.SOUTH] =
             new Edge(graph.collection[r][c], graph.collection[r + 1][c]);
@@ -59,14 +59,14 @@ class MazeGenerator {
   }
 
   // "Prim's algorithm is a greedy algorithm that finds a minimum spanning tree
-  // for a weighted undirected graph" (Wikipedia). This is its randomized implementation.
-  // It can be applied as a maze generation algorithm by building a maze "frontier"
+  // for a weighted undirected graph" (Wikipedia). this is its randomized implementation
+  // it can be applied as a maze generation algorithm by building a maze "frontier"
   prims() {
     // the maze is built along the edge with the lowest weight
     // that choice must not connect with a previously visited node
     // (1) observe the frontier to the current cell
     // (2) compare the edge weights & set the minimum cell
-    // FIXME: rare silent/harmless error: Cannot set property 'discovered' of null
+    // FIXME: non-fatal rare complaint: 'Cannot set property 'discovered' of null'
     let newEdge = new Edge(null, null, 1); // dummy edge, outside maximum weight
     for (let i = 0; i < this.frontier.length; i += 1) {
       if (this.frontier[i].nodeFrom.discovered && this.frontier[i].nodeTo.discovered) {
@@ -88,14 +88,13 @@ class MazeGenerator {
       }
     });
 
-    // the computer will walk to `nodeTo` in some direction. add nodeTo as a new
-    // neighbor of nodeFrom. note nodeFrom can have multiple neighbors in a maze
+    // `nodeFrom` is related to `nodeTo` by an edge
     const currentPos = `${newEdge.nodeFrom.x}, ${newEdge.nodeFrom.y}`;
     const nextPos = `${newEdge.nodeTo.x}, ${newEdge.nodeTo.y}`;
 
     // each grid node stores a neighbor in the format [edge, node] where the edge
     // is the passage to the next node. since this is an undirected graph, the
-    // currentPos has a neighbor nextPos, and the nextPos has a neighbor currentPos.
+    // currentPos has a neighbor nextPos, and the nextPos has a neighbor currentPos
     // if this was a directed graph, omit one of the ternaries - observe that
     // dead-ends will be very common when using random extremes, since the
     // search algorithm isn't allowed to look in an 'opposite' direction
@@ -116,16 +115,14 @@ class MazeGenerator {
   }
 
   build() {
-    // we'll start building from the node at top-left corner.
-    // our minimum spanning tree's root is this top-left node:
-    const firstNode = this.graph.collection[0][0];+
-    this.draw.drawNode(firstNode, null, CNS.PRIMSCOLORS[0.00]);
-    // this.tree[`${firstNode.x}, ${firstNode.y}`] = [[new Edge(firstNode, firstNode, 1), firstNode]];
-
+    // start building minimum spanning tree from the top-left node (canvas coord 0,0)
+    const firstNode = this.graph.collection[0][0];
     this.graph.collection[0][0].discovered = true;
+    this.draw.drawNode(firstNode, null, CNS.PRIMSCOLORS[0.00]);
+    this.image = 0;
 
-    // if we're in the top-left corner, we are walled in by 1 southern cell &
-    // 1 eastern cell. we can visit either of them, depending on the rand weight
+    // the top-left corner is 'walled' in by 1 southern cell & 1 eastern cell
+    // visit either based on random weight: randomized prim's chooses lowest edge weight
     this.frontier.push(
       this.graph.collection[0][0].neighbors[CNS.DIRECTIONS.SOUTH],
       this.graph.collection[0][0].neighbors[CNS.DIRECTIONS.EAST],

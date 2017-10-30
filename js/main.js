@@ -1,8 +1,8 @@
-import BreadthFirstSearch from './bfs';
-import DepthFirstSearch from './dfs';
-import MazeGenerator from './generator';
-import Draw from './draw';
-import * as CNS from './constants';
+import BreadthFirstSearch from './bfs.js';
+import DepthFirstSearch from './dfs.js';
+import MazeGenerator from './generator.js';
+import Draw from './draw.js';
+import * as CNS from './constants.js';
 
 const canvas = document.getElementById('canvas');
 const ctx = canvas.getContext('2d');
@@ -11,76 +11,74 @@ canvas.width = CNS.WIDTH;
 canvas.height = CNS.HEIGHT;
 
 document.addEventListener('DOMContentLoaded', () => {
-    generate(); // on page load
+  generateMaze(); // begin drawing maze on page load
 }, false);
 document.getElementById('bfs').addEventListener('click', doSearch, false);
 document.getElementById('dfs').addEventListener('click', doSearch, false);
-document.getElementById('generate').addEventListener('click', generate, false);
-document.getElementById('randomize').addEventListener('click', randomize, false);
+document.getElementById('generate').addEventListener('click', generateMaze, false);
+document.getElementById('randomize').addEventListener('click', randomizeStartAndEnd, false);
 
-let generating;
 let graph;
 let mst;
 let intervalId;
 
+let searchAlgorithm = { searching: 0 };
 let start;
 let end;
 let searched;
 
-function generate() {
+function generateMaze() {
   // flush the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // if this isn't the first time running generate(), flush the last attempt
+  // if this isn't the first time running generateMaze(), cancel the last attempt
   if (intervalId !== undefined) clearInterval(intervalId);
 
-  // run randomized prim's to generate a maze
+  // run randomized prim's algorithm to generate a maze
   const doPrims = function doPrims() {
     const maze = new MazeGenerator(canvas);
     const grid = maze.grid();
-    const timerId = maze.build(); // pass callbacks here
+    const timerId = maze.build();
     graph = maze;
     mst = maze.tree;
     return timerId;
   };
   intervalId = doPrims();
 
-  // TODO: when generation is complete,
-  // TODO: vibrate or flash the buttons 'bfs' and 'dfs'
-
-  // reset prim's and search algo's states, and flush start & end points
-  if (algorithm !== undefined) algorithm.searching = 0;
+  // reset all search states and flush start and end points (user can repeat searches)
+  searchAlgorithm.searching = 0;
+  [start, end] = [null, null];
   searched = 0;
-  generating = 0;
-  [start, end] = [undefined, undefined];
 }
 
+// when `randomize` is not called, use top-left & bottom-right corners as start & end points
 function defaultStartAndEnd() {
   start = '0, 0';
   end = `${CNS.WIDTH - CNS.BLOCKWIDTH}, ${CNS.HEIGHT - CNS.BLOCKWIDTH}`;
   draw.drawEnds([start, end]);
 }
 
-function randomize() {
-  // prohibit changing start/end coords while a search is in progress
-  if (algorithm !== undefined && algorithm.searching) {
+function randomizeStartAndEnd() {
+  // prohibit changing start and end coordinates while a search is in progress
+  if (searchAlgorithm.searching) {
     return console.log('Another search is currently running, wait for that one to finish');
   }
 
+  // picks random start & end nodes, with arbitrary bias for each choice via `slice(..)`
   const randomNodes = function randomNodes() {
     const nodes = Object.keys(mst);
     const pick = n => n[Math.floor(Math.random() * n.length)];
+
     let choiceOne;
     let choiceTwo;
     while (choiceOne === choiceTwo || choiceOne === 'progress' || choiceTwo === 'progress') {
-      // TODO: add condition to ensure the numbers aren't close together
-      // not quite random: slicing helps us avoid traveling straight into dead-ends
       choiceOne = pick(nodes.slice(0, 50));
       choiceTwo = pick(nodes.slice(1250));
     }
     return [choiceOne, choiceTwo];
   };
 
+  // only draw if the minimum spanning tree is complete
   if (mst.progress === CNS.PROGRESS) {
     [start, end] = randomNodes();
     ctx.putImageData(graph.image, 0, 0);
@@ -88,25 +86,27 @@ function randomize() {
   }
 }
 
-let algorithm;
 function doSearch() {
   const id = this.id;
 
-  // prohibit running search while another search is in progress
-  if (algorithm !== undefined && algorithm.searching) {
+  // prohibit running search while another is in progress (when searchAlgorithm.searching is 1)
+  // program runs a search and freezes the button until search is complete. to undo this feature,
+  // append searchAlgorithm.searching to `if (searched === 1)` to reset `visited` necessarily
+  if (searchAlgorithm.searching) {
     return console.log('Another search is currently running, wait for that one to finish');
   }
 
-  if (graph.image !== undefined) { // maze has finished generating
+  if (graph.image) { // maze has finished generating
     ctx.putImageData(graph.image, 0, 0);
 
-    if (start === undefined || end === undefined) {
+    if (start === null || end === null) {
       defaultStartAndEnd();
     } else {
-      draw.drawEnds([start, end]); // redraw so it overlaps visually
+      draw.drawEnds([start, end]); // redraw so it overlaps on the canvas
     }
 
-    if (searched === 1) { // a search was done before, reset all 'visited' states
+    // if a search was done before, reset all 'visited' states
+    if (searched === 1) {
       Object.keys(mst).forEach((position) => {
         if (mst[position].length !== undefined) mst[position].forEach(i => i[1].visited = false);
       });
@@ -114,24 +114,24 @@ function doSearch() {
 
     // TODO: programatically trigger different search algorithms
     if (id === 'bfs') {
-      algorithm = new BreadthFirstSearch(
+      searchAlgorithm = new BreadthFirstSearch(
         canvas,
         mst,
         start,
         end,
       );
-      intervalId = algorithm.search();
+      intervalId = searchAlgorithm.search();
     } else if (id === 'dfs') {
-      algorithm = new DepthFirstSearch(
+      searchAlgorithm = new DepthFirstSearch(
         canvas,
         mst,
         start,
         end,
       );
-      intervalId = algorithm.search();
+      intervalId = searchAlgorithm.search();
     }
   } else {
     console.log("Can't search before building a maze");
   }
-  searched = 1; // the algorithm's setInterval is in effect
+  searched = 1; // the algorithm's setInterval began looping
 }

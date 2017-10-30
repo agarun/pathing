@@ -30,7 +30,7 @@ const PRIMSCOLORS = {
   0.90: '#1cfc7d', 0.95: '#1cfc7d', 1.00: '#1cfc7d',
 };
 const VISITCOLOR = 'rgba(249, 63, 44, 0.8)'; // NOTE: might want to remove opacity
-const SOLUTIONCOLOR = '#ffe600'; // webpage background color #120b3c
+const SOLUTIONCOLOR = '#ffe600';
 const STARTCOLOR = '#4d9803';
 const ENDCOLOR = '#870741';
 
