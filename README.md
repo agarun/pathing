@@ -26,6 +26,8 @@ First, a fully-connected graph is generated. Each node is assigned neighboring e
 
 In Prim's algorithm, generation arbitrarily starts from the top-left corner (canvas coordinates 0, 0). The algorithm adjusts a frontier of available cells, explores it for the lowest-weighted edge, draws the current node and chosen edge, and finally extends the minimum spanning tree. When the algorithm predicts a cycle, it backtracks to the next available node based on the frontier. This is made possible by keeping the `discovered` state of each node as a property on each `Node` instance. The loop is repeated until the spanning tree contains all of the nodes in the initial graph.
 
+The colors are based on the progress of maze generation. Lighter colors indicate the nodes and edges were placed earlier, and darker colors indicate late placement. Since it's very common for Prim's to run into cycles after most of the maze has been generated, you can expect to see how backtracking returns to random spots in the maze.
+
 ## Traversal
 
 ### Breadth-first
