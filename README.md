@@ -18,7 +18,7 @@ In randomized Prim's algorithm, the maze's edges are initialized with random edg
 
 To keep track of the cells (graph nodes) that can potentially be incorporated into the minimum spanning tree, a **frontier** of cells that *wall in* the current position in the tree is maintained. This frontier is repeatedly explored, evaluated, and adjusted until the spanning tree contains all of the nodes.
 
-#### Implementation
+### Implementation
 
 The randomized Prim's algorithm is implemented classically.
 
