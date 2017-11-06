@@ -1,6 +1,6 @@
 # Pathing
 
-Interactive visualization of maze generation and graph traversal algorithms in JavaScript (ES6) and HTML5 Canvas. The maze is generated using randomized Prim's algorithm to build a minimum spanning tree based on minimum edge weights. The tree can be searched with depth-first and breadth-first traversal algorithms.
+Interactive visualization of maze generation and graph traversal algorithms in JavaScript and HTML5 Canvas. The maze is generated using randomized Prim's algorithm to build a minimum spanning tree. The tree can be searched with depth-first and breadth-first traversal algorithms.
 
 [View the project live](https://agarun.com/pathing/)!
 
