@@ -55,11 +55,11 @@ a {
   font-weight: 500;
   text-decoration: none;
   border-bottom-color: transparent;
-  transition: 0.1s;
+  transition: 100ms ease-in;
 }
 
 a:hover {
-  border-bottom: 2px #9672a6 solid;
+  color: #c6bddf;
 }
 
 .canvas-wrapper {
@@ -152,7 +152,7 @@ button:focus {
   width: 720px;
   line-height: 1.52;
   margin: 50px auto;
-  padding: 0 30px 15px 30px;
+  padding: 0 30px 50px 30px;
 }
 
 .readme h1 {
