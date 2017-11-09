@@ -2,7 +2,6 @@ import Draw from './draw.js';
 
 class DepthFirstSearch {
   constructor(canvas, graph, source, target) {
-    this.canvas = canvas; // temporary
     this.draw = new Draw(canvas, canvas.getContext('2d'));
     this.graph = graph;
     this.source = source;

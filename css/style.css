@@ -4,10 +4,9 @@ body {
   font-weight: 400;
   line-height: 1.4;
   letter-spacing: 0.02em;
-  /*background-color: #2a1d78;*/
   color: #e6e6e6;
   margin: 0 0 200px 0;
-  background: #2a1d78 url(https://cdn.rawgit.com/agarun/ed6c9621f6ade8ee89e3685cd5a0eeff/raw/1f0a39094e0f2edef95175eb06a03f01779c89bd/footer.svg);
+  background: #25196e url(https://cdn.rawgit.com/agarun/ed6c9621f6ade8ee89e3685cd5a0eeff/raw/1f0a39094e0f2edef95175eb06a03f01779c89bd/footer.svg);
   background-position: bottom;
   background-repeat: repeat-x;
   background-size: auto 100px;
@@ -52,15 +51,15 @@ h3::after {
 }
 
 a {
-  color: #a894b1;
+  color: #9672a6;
   font-weight: 500;
   text-decoration: none;
   border-bottom-color: transparent;
-  transition: 0.1s;
+  transition: 100ms ease-in;
 }
 
 a:hover {
-  border-bottom: 2px #6e5d75 solid;
+  color: #c6bddf;
 }
 
 .canvas-wrapper {
@@ -70,7 +69,7 @@ a:hover {
 
 .container {
   max-width: 1008px;
-  padding: 2% 0 1% 0;
+  padding: 1.3% 0 1% 0;
   margin: 0 auto;
 }
 
@@ -79,6 +78,7 @@ a:hover {
   flex-flow: row wrap;
   justify-content: space-around;
   margin: 0;
+  padding-bottom: 40px;
 }
 
 .main-panel-column {
@@ -92,7 +92,7 @@ a:hover {
 }
 
 hr {
-  /*TODO: display status right above it*/
+  /* TODO: display status above */
   width: 20%;
   height: 3px;
   border: 0;
@@ -106,15 +106,16 @@ button {
   display: block;
   background: #f09d18; /* #ff9453 */
   font-family: 'Montserrat', sans-serif;
-  font-size: 0.74em;
+  font-size: 0.7em;
   font-weight: 700;
   text-decoration: none;
   text-transform: uppercase;
-  width: 140px;
-  margin: 6px auto;
-  padding: 10px 18px 8px 18px;
+  width: 120px;
+  margin: 10px auto;
+  padding: 8px;
   cursor: pointer;
   border: 0;
+  border-radius: 1px;
 }
 
 button:hover {
@@ -124,7 +125,7 @@ button:hover {
 }
 
 button:focus {
-  /* TODO: add :active effects */
+  /* TODO: :active effects */
   outline: none;
 }
 
@@ -145,13 +146,18 @@ button:focus {
 }
 
 .readme {
+  background: rgba(12, 23, 60, 0.49);
+  border: 1px solid #0c0a3b;
+  border-radius: 6px;
   width: 720px;
-  line-height: 1.5;
-  margin: 0 auto;
+  line-height: 1.52;
+  margin: 50px auto;
+  padding: 0 30px 50px 30px;
 }
 
 .readme h1 {
   padding-top: 1em;
+  text-shadow: 2px 2px #04031d;
 }
 
 .start {
@@ -159,7 +165,7 @@ button:focus {
 }
 
 .end {
-  color: #e70068;
+  color: #f0197a;
 }
 
 .footer {
@@ -183,21 +189,21 @@ button:focus {
   text-decoration: none;
   border-bottom-color: transparent;
   transition: 100ms ease-in;
-  fill: #735182;
+  fill: #9672a6;
   margin: 20px 5px;
 }
 
 .icons a:hover {
-  fill: #d9d5e4;
+  fill: #c6bddf;
 }
 
 code {
-  background: #d4d9de;
+  font-family: 'Roboto Mono', 'Courier New', monospace;
+  letter-spacing: -0.01em;
+  background: #ced8e2;
   color: #1c1b28;
   font-size: 0.8em;
   padding: 3px;
   border-radius: 2px;
-  border: 1px solid #120b3c;
+  border: 1px solid #0c0a3b;
 }
-
-/* TODO: Loading bar / Status bar */
