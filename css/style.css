@@ -221,8 +221,7 @@ code {
 }
 
 .icons {
-  display: inline-flex;
-  justify-content: center;
+  text-align: center;
 }
 
 .icons a {
@@ -235,6 +234,10 @@ code {
 
 .icons a:hover {
   fill: #c6bddf;
+}
+
+.icons svg {
+  margin-bottom: -1.5px;
 }
 
 footer {
