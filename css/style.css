@@ -64,7 +64,7 @@ a:hover {
 }
 
 .canvas-wrapper {
-  background-color: #120b3c;
+  background-color: #110b3c;
   box-shadow: 0 10px 80px -2px rgba(0, 0, 0, 0.5);
 }
 
@@ -121,6 +121,7 @@ a:hover {
 }
 
 .btn-panel-row-text small {
+  color: #8c8cb1;
   font-size: 0.8em;
   font-weight: bold;
 }
@@ -161,12 +162,13 @@ button:focus {
 button.maze {
   width: 160px;
   height: 35px;
+  padding: 13px 10px;
 }
 
 button.search {
   width: 112px;
   height: 35px;
-  padding: 13.5px 10px;
+  padding: 13px 10px;
   margin-right: 6px;
 }
 
@@ -213,7 +215,7 @@ code {
   font-family: 'Roboto Mono', 'Courier New', monospace;
   font-size: 0.74em;
   letter-spacing: -0.002em;
-  background: #f4dd7a;
+  background: #f4b87a;
   color: #1c1b28;
   padding: 3px;
   border-radius: 4px;
@@ -241,7 +243,7 @@ code {
 }
 
 footer {
-  color: #120b3c;
+  color: #110b3c;
 }
 
 footer p {
@@ -250,5 +252,4 @@ footer p {
 
 footer a {
   margin: 0 5px;
-
 }
