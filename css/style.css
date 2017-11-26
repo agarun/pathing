@@ -1,12 +1,12 @@
 body {
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 16px;
   font-weight: 400;
   line-height: 1.4;
   letter-spacing: 0.02em;
   color: #e6e6e6;
   margin: 0 0 200px 0;
-  background: #25196e url(https://cdn.rawgit.com/agarun/ed6c9621f6ade8ee89e3685cd5a0eeff/raw/1f0a39094e0f2edef95175eb06a03f01779c89bd/footer.svg);
+  background: #110b3c url(https://cdn.rawgit.com/agarun/ed6c9621f6ade8ee89e3685cd5a0eeff/raw/1f0a39094e0f2edef95175eb06a03f01779c89bd/footer.svg);
   background-position: bottom;
   background-repeat: repeat-x;
   background-size: auto 100px;
@@ -14,7 +14,8 @@ body {
 
 canvas {
   display: block;
-  padding-bottom: 10px;
+  padding: 24px;
+  margin: 0 auto;
 }
 
 h1 {
@@ -24,6 +25,11 @@ h1 {
   color: #f6f6f6;
   margin: 0;
   letter-spacing: 0.02em;
+  text-transform: uppercase;
+}
+
+.main-panel h1 {
+  font-weight: 400;
 }
 
 h2 {
@@ -63,15 +69,15 @@ a:hover {
   color: #c6bddf;
 }
 
-.canvas-wrapper {
-  background-color: #110b3c;
-  box-shadow: 0 10px 80px -2px rgba(0, 0, 0, 0.5);
-}
-
 .container {
   max-width: 1008px;
-  padding: 1.3% 0 1% 0;
+  padding: 0.6% 0 1% 0;
   margin: 0 auto;
+}
+
+.wrap-1 {
+  background-color: #060412;
+
 }
 
 .main-panel {
@@ -79,7 +85,8 @@ a:hover {
   flex-flow: row wrap;
   justify-content: space-around;
   margin: 0;
-  padding-bottom: 40px;
+  /*padding-top: 10px;
+  padding-bottom: 20px;*/
 }
 
 .main-panel p {
@@ -88,13 +95,17 @@ a:hover {
 }
 
 .main-panel-column {
-  flex-basis: 30%; /* SHOULD STRETCH */
+  flex-basis: 32%; /* SHOULD STRETCH */
   flex-shrink: 0;
   margin: 0 6px 0 6px;
 }
 
+.main-panel-column:first-child {
+  align-self: center;
+}
+
 .main-panel-column:nth-child(2) {
-  flex-basis: 60%;
+  flex-basis: 54%;
   margin-top: 16px;
 }
 
@@ -108,36 +119,38 @@ a:hover {
   display: flex;
   flex-flow: row nowrap;
   margin-bottom: 14px;
+  width: 100%;
+  /*padding: 8px 16px;*/
 }
 
 .btn-panel-row-text {
-  max-width: 300px;
+  max-width: 520px;
   margin-right: 8px;
-  align-self: flex-start;
-}
-
-.btn-panel-row:first-child .btn-panel-row-text {
-  align-self: flex-end;
+  margin-bottom: 2px;
+  align-self: center;
 }
 
 .btn-panel-row-text small {
-  color: #8c8cb1;
-  font-size: 0.8em;
+  color: #9082e6;
+  font-size: 0.9em;
   font-weight: bold;
 }
 
 .btn-panel-row:nth-child(3) .btn-panel-row-text small {
-  display: block;
-  font-size: 0.8em;
+  font-size: 0.9em;
   font-weight: bold;
+}
+
+.btn-panel-row:nth-child(3) .btn-panel-row-text {
+  align-self: center;
 }
 
 button {
   display: inline;
   background: #f09d18;
-  font-family: 'Roboto', sans-serif;
+  font-family: 'Open Sans', sans-serif;
   font-size: 0.74em;
-  font-weight: 900;
+  font-weight: 700;
   text-decoration: none;
   text-transform: uppercase;
   line-height: 1;
@@ -162,14 +175,14 @@ button:focus {
 button.maze {
   width: 160px;
   height: 35px;
-  padding: 13px 10px;
+  padding: 12px 10px;
 }
 
 button.search {
   width: 112px;
   height: 35px;
-  padding: 13px 10px;
-  margin-right: 6px;
+  padding: 12px 10px;
+  margin-right: 1px;
 }
 
 .flash {
@@ -189,18 +202,22 @@ button.search {
 }
 
 .readme {
-  background: rgba(12, 23, 60, 0.49);
-  border: 1px solid #0c0a3b;
+  background: rgba(0, 0, 0, 0.49);
+  /*border: 3px solid rgba(12, 23, 60, 0.9);*/
   border-radius: 6px;
   width: 680px;
   line-height: 1.55;
   margin: 50px auto;
   padding: 0 50px 50px 50px;
+  box-shadow: 0 0px 20px 9px rgba(1, 1, 14, 0.12);
 }
+
+/* intro is diff color bg */
 
 .readme h1 {
   padding-top: 1em;
   text-shadow: 2px 2px #04031d;
+  /*border-bottom: 5px solid #8e650a;*/
 }
 
 .start {
@@ -212,14 +229,14 @@ button.search {
 }
 
 code {
-  font-family: 'Roboto Mono', 'Courier New', monospace;
-  font-size: 0.74em;
+  font-family: 'Cousine', 'Courier New', monospace;
+  font-size: 0.85em;
   letter-spacing: -0.002em;
-  background: #f4b87a;
+  background: #cdbca9;
   color: #1c1b28;
-  padding: 3px;
-  border-radius: 4px;
-  border: 1px solid #0c0a3b;
+  padding: 5px;
+  padding-bottom: 3px;
+  border-radius: 5px;
 }
 
 .icons {
