@@ -79,6 +79,9 @@ aside {
   }
 }
 
+// TODO search fill animation triggered by maze generation. start out as gray with no hover?
+// TODO https://freebiesupply.com/blog/css-button-hover-effects/
+// TODO star trek, button.cs, bubble
 .search {
   margin: 4px 2px;
   padding: 7px;
@@ -120,30 +123,7 @@ aside {
 
   & a:last-child {
     display: inline-block;
-    line-height: 15px;
+    line-height: 17px;
     border-bottom: 2px solid $strong-orange;
-  }
-}
-
-// TODO move to _footer.scss
-footer {
-  padding: 20px 0;
-  position: absolute;
-  width: 100%;
-  left: 0;
-  bottom: 0;
-  text-align: center;
-  font-size: 0.8em;
-  border-top: 1px dashed $aside-borders;
-
-  a { display: block; }
-
-  svg {
-    margin-bottom: -2.5px;
-    fill: #322559;
-
-    &:hover {
-      fill: #9082e6;
-    }
   }
 }

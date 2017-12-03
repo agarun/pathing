@@ -167,25 +167,36 @@ aside {
   line-height: 1.31; }
   .description a:last-child {
     display: inline-block;
-    line-height: 15px;
+    line-height: 17px;
     border-bottom: 2px solid #f09d18; }
 
 footer {
-  padding: 20px 0;
+  padding: 16px 0;
   position: absolute;
   width: 100%;
   left: 0;
   bottom: 0;
   text-align: center;
-  font-size: 0.8em;
+  font-size: 0.9em;
+  font-weight: 500;
+  font-family: 'Montserrat', sans-serif;
+  letter-spacing: 0.03em;
+  background-color: #060412;
   border-top: 1px dashed #1c1229; }
-  footer a {
-    display: block; }
   footer svg {
     margin-bottom: -2.5px;
-    fill: #322559; }
-    footer svg:hover {
-      fill: #9082e6; }
+    visibility: hidden;
+    fill: transparent;
+    transition: 0.1s ease-in; }
+  footer a {
+    color: gray; }
+    footer a:hover svg {
+      visibility: visible;
+      fill: #c6bddf; }
+  footer .overlap {
+    margin-left: -20px;
+    position: relative;
+    left: 20px; }
 
 main {
   padding-top: 196px;

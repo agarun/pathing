@@ -18,6 +18,17 @@ document.getElementById('dfs').addEventListener('click', doSearch, false);
 document.getElementById('generate').addEventListener('click', generateMaze, false);
 document.getElementById('randomize').addEventListener('click', randomizeStartAndEnd, false);
 
+const toggleActive = (event) => {
+  const jumpElement = event.target;
+  if (jumpElement.getAttribute('class') === 'jump') {
+    document.querySelectorAll('.jump').forEach((anchor) => {
+      anchor.classList.toggle('active');
+    });
+  }
+};
+const classNameJump = document.getElementsByClassName('jump');
+Array.from(classNameJump, c => c.addEventListener('click', toggleActive, false));
+
 let graph;
 let mst;
 let intervalId;
