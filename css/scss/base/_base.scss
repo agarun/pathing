@@ -1,0 +1,9 @@
+$logo-top-height: 100px;
+$canvas-top-height: 196px;
+$aside-width: 280px;
+
+@media screen and (max-height: 1365px) {
+  $logo-top-height: 0px;
+  $canvas-top-height: 40px;
+  $aside-width: 240px;
+}

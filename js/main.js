@@ -5,10 +5,11 @@ import Draw from './draw.js';
 import * as CNS from './constants.js';
 
 const canvas = document.getElementById('canvas');
-const ctx = canvas.getContext('2d');
-const draw = new Draw(canvas, canvas.getContext('2d'));
 canvas.width = CNS.WIDTH;
 canvas.height = CNS.HEIGHT;
+
+const ctx = canvas.getContext('2d');
+const draw = new Draw(canvas, canvas.getContext('2d'));
 
 document.addEventListener('DOMContentLoaded', () => {
   generateMaze(); // begin drawing maze on page load
@@ -18,6 +19,8 @@ document.getElementById('dfs').addEventListener('click', doSearch, false);
 document.getElementById('generate').addEventListener('click', generateMaze, false);
 document.getElementById('randomize').addEventListener('click', randomizeStartAndEnd, false);
 
+// TODO might be able to simplify because i'm passing event target so i dont need
+// to check current class. also repeat this for #search btn overlay.
 const toggleActive = (event) => {
   const jumpElement = event.target;
   if (jumpElement.getAttribute('class') === 'jump') {
@@ -30,13 +33,13 @@ const classNameJump = document.getElementsByClassName('jump');
 Array.from(classNameJump, c => c.addEventListener('click', toggleActive, false));
 
 let graph;
-let mst;
+let minSpanTree;
 let intervalId;
 
 let searchAlgorithm = { searching: 0 };
 let start;
 let end;
-let searched;
+let mazeSearching;
 
 function generateMaze() {
   // flush the canvas
@@ -51,7 +54,7 @@ function generateMaze() {
     const grid = maze.grid();
     const timerId = maze.build();
     graph = maze;
-    mst = maze.tree;
+    minSpanTree = maze.tree;
     return timerId;
   };
   intervalId = doPrims();
@@ -59,7 +62,7 @@ function generateMaze() {
   // reset all search states and flush start and end points (user can repeat searches)
   searchAlgorithm.searching = 0;
   [start, end] = [null, null];
-  searched = 0;
+  mazeSearching = 0;
 }
 
 // when `randomize` is not called, use top-left & bottom-right corners as start & end points
@@ -71,13 +74,14 @@ function defaultStartAndEnd() {
 
 function randomizeStartAndEnd() {
   // prohibit changing start and end coordinates while a search is in progress
+  console.log(searchAlgorithm.searching);
   if (searchAlgorithm.searching) {
-    return console.log('Another search is currently running, wait for that one to finish');
+    return console.log('wait for a search to terminate before choosing new endpoints');
   }
 
   // picks random start & end nodes, with arbitrary bias for each choice via `slice(..)`
   const randomNodes = function randomNodes() {
-    const nodes = Object.keys(mst);
+    const nodes = Object.keys(minSpanTree);
     const pick = n => n[Math.floor(Math.random() * n.length)];
 
     let choiceOne;
@@ -90,22 +94,26 @@ function randomizeStartAndEnd() {
   };
 
   // only draw if the minimum spanning tree is complete
-  if (mst.progress === CNS.PROGRESS) {
+  if (minSpanTree.progress === CNS.PROGRESS) {
     [start, end] = randomNodes();
     ctx.putImageData(graph.image, 0, 0);
     draw.drawEnds([start, end]);
   }
 }
 
+function cancelSearch() {
+  // kill running search
+  clearInterval(intervalId);
+  // reset all `visited` states
+  Object.keys(minSpanTree).forEach((position) => {
+    if (minSpanTree[position].length !== undefined) {
+      minSpanTree[position].forEach(i => i[1].visited = false);
+    }
+  });
+}
+
 function doSearch() {
   const id = this.id;
-
-  // prohibit running search while another is in progress (when searchAlgorithm.searching is 1)
-  // program runs a search and freezes the button until search is complete. to undo this feature,
-  // append searchAlgorithm.searching to `if (searched === 1)` to reset `visited` necessarily
-  if (searchAlgorithm.searching) {
-    return console.log('Another search is currently running, wait for that one to finish');
-  }
 
   if (graph.image) { // maze has finished generating
     ctx.putImageData(graph.image, 0, 0);
@@ -116,18 +124,15 @@ function doSearch() {
       draw.drawEnds([start, end]); // redraw so it overlaps on the canvas
     }
 
-    // if a search was done before, reset all 'visited' states
-    if (searched === 1) {
-      Object.keys(mst).forEach((position) => {
-        if (mst[position].length !== undefined) mst[position].forEach(i => i[1].visited = false);
-      });
-    }
+    // TODO dont run 1st time?
+    // TODO clarify the roles of mazeSearching and searching. is mazeSearching necessary?
+    if (mazeSearching || searchAlgorithm.searching) cancelSearch();
 
     // TODO: programatically trigger different search algorithms
     if (id === 'bfs') {
       searchAlgorithm = new BreadthFirstSearch(
         canvas,
-        mst,
+        minSpanTree,
         start,
         end,
       );
@@ -135,14 +140,14 @@ function doSearch() {
     } else if (id === 'dfs') {
       searchAlgorithm = new DepthFirstSearch(
         canvas,
-        mst,
+        minSpanTree,
         start,
         end,
       );
       intervalId = searchAlgorithm.search();
     }
   } else {
-    console.log("Can't search before building a maze");
+    console.log("can't search before building a maze");
   }
-  searched = 1; // the algorithm's setInterval began looping
+  mazeSearching = 1; // the algorithm's setInterval began looping
 }
