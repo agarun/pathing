@@ -7,8 +7,12 @@ class DepthFirstSearch {
     this.source = source;
     this.target = target;
     this.stack = [];
-    this.meta = {}; // limited spanning tree object used solely for path information
-    this.searching = 0; // 1: performing search, 0: waiting to search
+
+    // limited spanning tree object used solely for path information
+    this.meta = {};
+
+    // 1: performing search, 0: waiting to search
+    this.searching = 0;
   }
 
   search() {
@@ -23,16 +27,19 @@ class DepthFirstSearch {
 
     const timer = setInterval(() => {
       if (stack.length) {
-        const currentNode = stack.pop(); // node position representation
+        const currentNode = stack.pop();
 
         // draw the current node being visited and the passage that was used to get there
         if (Object.keys(meta).length) {
           this.draw.drawPath([[meta[currentNode][0][0], currentNode]], 'visit');
         }
 
-        // grab each neighbor node of the current cell
-        // graph[currentNode][i][0] is the edge to the graph[currentNode][i][1] node
-        // i.e. the neighbors in the adj. list are represented by [[edge, node], ..]
+        // grab each neighbor node of the current cell and stringify as a `key`
+        // graph[currentNode] stores the neighbors in the adjacency lists,
+        // represented by [[northEdge, node], [eastEdge, node] ...]
+        // graph[currentNode][i][0] => stores the edge to the neighbor node
+        // (and this edge stores references to `nodeFrom` and `nodeTo`)
+        // graph[currentNode][i][0] => stores the neighbor node
         const neighbors = graph[currentNode];
         for (let i = 0; i < neighbors.length; i += 1) {
           const neighbor = neighbors[i][1];
@@ -47,15 +54,15 @@ class DepthFirstSearch {
           }
 
           if (!neighbor.visited) {
-            this.stack.push(`${neighbor.x}, ${neighbor.y}`);
+            stack.push(`${neighbor.x}, ${neighbor.y}`); // FIXME ?? i changed this.stack to stack
             neighbor.visited = true;
             meta[key] = [[graph[currentNode][i][0], currentNode]];
           }
         }
       } else {
-        // practically, executing `else` should be impossible, since MSTs connect *all* vertices
+        // else if target is not in the graph <- MSTs connect all vertices.
         clearInterval(timer);
-        return console.log('No solution in this direction');
+        return console.log('no solution in this direction');
       }
     }, 10);
     // allow choosing new search type while a search is running: return access to
