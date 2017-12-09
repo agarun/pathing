@@ -1,4 +1,4 @@
-import Draw from './draw.js';
+import Draw from './draw';
 
 class BreadthFirstSearch {
   constructor(canvas, graph, source, target) {

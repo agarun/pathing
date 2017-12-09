@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <title>Pathing | Aaron Agarunov</title>
     <link href="https://fonts.googleapis.com/css?family=Roboto:400,700|Montserrat:500,700" rel="stylesheet">
-    <link rel="stylesheet" href="css/main.css">
+    <link rel="stylesheet" href="public/main.css">
   </head>
   <body>
     <aside>
@@ -19,20 +19,20 @@
       <nav class="search-nav">
         <h2>Traversal</h2>
 
-        <button class="search" id="bfs">breadth-first</button>
-        <button class="search" id="dfs">depth-first</button>
-        <button class="search" id="dijkstra">dijkstra</button>
-        <button class="search" id="astar">a star</button>
+        <button class="search-btn" id="bfs">breadth-first</button>
+        <button class="search-btn" id="dfs">depth-first</button>
+        <button class="search-btn" id="dijkstra">dijkstra</button>
+        <button class="search-btn" id="astar">a star</button>
       </nav>
       <nav class="regenerate-nav">
         <h2>Generation</h2>
 
-        <button class="search" id="generate">rebuild maze</button>
+        <button class="btn" id="generate">rebuild maze</button>
       </nav>
       <nav class="sources-nav">
         <h2>Start and end points</h2>
 
-        <button class="search" id="randomize">randomize</button>
+        <button class="btn" id="randomize">randomize</button>
       </nav>
 
       <div class="description">
@@ -56,10 +56,9 @@
           Oops, does your browser support HTML5 Canvas?
         </canvas>
       </section>
-      <section id="graph" style="position: absolute; width: 100%; height: 100%;">
+      <section id="graph">
       </section>
     </main>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/sigma.js/1.2.1/sigma.min.js"></script>
-    <script type="module" src="js/main.js"></script>
+    <script src="public/bundle.js"></script>
   </body>
 </html>

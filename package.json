@@ -1,0 +1,43 @@
+{
+  "name": "pathing",
+  "version": "0.0.1",
+  "description": "Visualizing maze generation and graph traversal",
+  "main": "main.js",
+  "dependencies": {
+    "js-priority-queue": "^0.1.5"
+  },
+  "devDependencies": {
+    "css-loader": "^0.28.7",
+    "extract-text-webpack-plugin": "^3.0.2",
+    "google-closure-library": "^20171203.0.0",
+    "node-sass": "^4.7.2",
+    "sass-loader": "^6.0.6",
+    "style-loader": "^0.19.0",
+    "uglifyjs-webpack-plugin": "^1.1.2",
+    "webpack": "^3.10.0"
+  },
+  "scripts": {
+    "build": "webpack --display-error-details",
+    "start": "webpack --watch",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/agarun/pathing.git"
+  },
+  "keywords": [
+    "maze",
+    "prims",
+    "bfs",
+    "dfs",
+    "dijkstra",
+    "astar",
+    "search"
+  ],
+  "author": "Aaron Agarunov",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/agarun/pathing/issues"
+  },
+  "homepage": "https://github.com/agarun/pathing#readme"
+}

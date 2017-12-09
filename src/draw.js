@@ -1,4 +1,4 @@
-import * as CNS from './constants.js';
+import * as CNS from './constants';
 
 class Draw {
   constructor(canvas, ctx) {

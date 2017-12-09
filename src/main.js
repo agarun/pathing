@@ -1,8 +1,10 @@
-import BreadthFirstSearch from './bfs.js';
-import DepthFirstSearch from './dfs.js';
-import MazeGenerator from './generator.js';
-import Draw from './draw.js';
-import * as CNS from './constants.js';
+import './scss/main.scss';
+import BreadthFirstSearch from './bfs';
+import DepthFirstSearch from './dfs';
+import Dijkstra from './dijkstra';
+import MazeGenerator from './generator';
+import Draw from './draw';
+import * as CNS from './constants';
 
 const canvas = document.getElementById('canvas');
 canvas.width = CNS.WIDTH;
@@ -19,7 +21,7 @@ document.getElementById('dfs').addEventListener('click', doSearch, false);
 document.getElementById('generate').addEventListener('click', generateMaze, false);
 document.getElementById('randomize').addEventListener('click', randomizeStartAndEnd, false);
 
-// TODO might be able to simplify because i'm passing event target so i dont need
+// TODO: might be able to simplify because i'm passing event target so i dont need
 // to check current class. also repeat this for #search btn overlay.
 const toggleActive = (event) => {
   const jumpElement = event.target;
@@ -39,7 +41,6 @@ let intervalId;
 let searchAlgorithm = { searching: 0 };
 let start;
 let end;
-let mazeSearching;
 
 function generateMaze() {
   // flush the canvas
@@ -62,7 +63,6 @@ function generateMaze() {
   // reset all search states and flush start and end points (user can repeat searches)
   searchAlgorithm.searching = 0;
   [start, end] = [null, null];
-  mazeSearching = 0;
 }
 
 // when `randomize` is not called, use top-left & bottom-right corners as start & end points
@@ -74,7 +74,6 @@ function defaultStartAndEnd() {
 
 function randomizeStartAndEnd() {
   // prohibit changing start and end coordinates while a search is in progress
-  console.log(searchAlgorithm.searching);
   if (searchAlgorithm.searching) {
     return console.log('wait for a search to terminate before choosing new endpoints');
   }
@@ -101,10 +100,10 @@ function randomizeStartAndEnd() {
   }
 }
 
-function cancelSearch() {
-  // kill running search
+// a search's running state is stored in an intervalId: clear any available ID
+// a node's `visited` state is stored on the node itself: force it to false
+function resetSearch() {
   clearInterval(intervalId);
-  // reset all `visited` states
   Object.keys(minSpanTree).forEach((position) => {
     if (minSpanTree[position].length !== undefined) {
       minSpanTree[position].forEach(i => i[1].visited = false);
@@ -115,28 +114,31 @@ function cancelSearch() {
 function doSearch() {
   const id = this.id;
 
-  if (graph.image) { // maze has finished generating
+  // the graph's complete image exists when the maze has fully generated
+  if (graph.image) {
+    resetSearch();
     ctx.putImageData(graph.image, 0, 0);
 
     if (start === null || end === null) {
       defaultStartAndEnd();
     } else {
-      draw.drawEnds([start, end]); // redraw so it overlaps on the canvas
+      draw.drawEnds([start, end]); // redraw start & end so they overlap on the canvas
     }
-
-    // TODO dont run 1st time?
-    // TODO clarify the roles of mazeSearching and searching. is mazeSearching necessary?
-    if (mazeSearching || searchAlgorithm.searching) cancelSearch();
 
     // TODO: programatically trigger different search algorithms
     if (id === 'bfs') {
-      searchAlgorithm = new BreadthFirstSearch(
-        canvas,
-        minSpanTree,
-        start,
-        end,
-      );
-      intervalId = searchAlgorithm.search();
+      // FIXME: DEBUG REMOVE
+      defaultStartAndEnd();
+      const x = new Dijkstra(canvas, minSpanTree, start, end);
+      x.search();
+      // FIXME: DEBUG REMOVE
+      // searchAlgorithm = new BreadthFirstSearch(
+      //   canvas,
+      //   minSpanTree,
+      //   start,
+      //   end,
+      // );
+      // intervalId = searchAlgorithm.search();
     } else if (id === 'dfs') {
       searchAlgorithm = new DepthFirstSearch(
         canvas,
@@ -149,5 +151,4 @@ function doSearch() {
   } else {
     console.log("can't search before building a maze");
   }
-  mazeSearching = 1; // the algorithm's setInterval began looping
 }

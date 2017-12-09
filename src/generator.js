@@ -1,6 +1,6 @@
-import { Graph, Node, Edge } from './graph.js';
-import Draw from './draw.js';
-import * as CNS from './constants.js';
+import { Graph, Node, Edge } from './graph';
+import Draw from './draw';
+import * as CNS from './constants';
 
 class MazeGenerator {
   constructor(canvas) {
