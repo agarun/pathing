@@ -6,12 +6,12 @@ body {
 }
 
 aside {
-  padding-top: 100px; // TODO: media query here for $push-height, depends on vw ?
+  padding-top: $logo-top-height;
   display: flex;
   flex-flow: column nowrap;
   align-items: center;
   position: fixed;
-  width: 280px;
+  width: $aside-width;
   min-height: 100%;
   background-color: $purple-black;
   border-right: 1px solid $aside-borders;
@@ -82,7 +82,7 @@ aside {
 // TODO search fill animation triggered by maze generation. start out as gray with no hover?
 // TODO https://freebiesupply.com/blog/css-button-hover-effects/
 // TODO star trek, button.cs, bubble
-.search {
+.search-btn, .btn {
   margin: 4px 2px;
   padding: 7px;
   background: $strong-orange;
@@ -102,6 +102,10 @@ aside {
     background-color: lighten($strong-orange, 25%);
     transition: 0.12s ease-out;
   }
+}
+
+.search-btn:focus {
+  background-color: lighten($strong-orange, 25%);
 }
 
 .search-nav, .regenerate-nav, .sources-nav {
@@ -126,4 +130,8 @@ aside {
     line-height: 17px;
     border-bottom: 2px solid $strong-orange;
   }
+}
+
+@media screen and (max-height: $default-height-breakpoint) {
+  aside { width: 250px; padding-top: 0px; }
 }

@@ -133,7 +133,7 @@ aside {
     border-radius: 3px;
     box-shadow: 0 -2px 0 rgba(0, 0, 0, 0.22) inset; }
 
-.search {
+.search-btn, .btn {
   margin: 4px 2px;
   padding: 7px;
   background: #f09d18;
@@ -148,9 +148,12 @@ aside {
   cursor: pointer;
   box-shadow: 0 -2px 0 rgba(0, 0, 0, 0.22) inset;
   transition: 0.12s ease-out; }
-  .search:hover {
+  .search-btn:hover, .btn:hover {
     background-color: #f8d090;
     transition: 0.12s ease-out; }
+
+.search-btn:focus {
+  background-color: #f8d090; }
 
 .search-nav, .regenerate-nav, .sources-nav {
   padding: 1.3em 1.4em;
@@ -170,6 +173,10 @@ aside {
     line-height: 17px;
     border-bottom: 2px solid #f09d18; }
 
+@media screen and (max-height: 800px) {
+  aside {
+    width: 250px;
+    padding-top: 0px; } }
 footer {
   padding: 12px 0;
   position: absolute;
@@ -201,5 +208,10 @@ footer {
 main {
   padding-top: 196px;
   padding-left: 300px; }
+
+@media screen and (max-height: 800px) {
+  main {
+    padding-top: 62px;
+    padding-left: 264px; } }
 
 /*# sourceMappingURL=main.css.map */

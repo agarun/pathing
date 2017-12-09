@@ -2,7 +2,7 @@ body {
 }
 
 main {
-  padding-top: 196px;
+  padding-top: $canvas-top-height;
   padding-left: 300px;
   // TODO dynamic canvas fullscreen
 
@@ -12,4 +12,8 @@ main {
     // <!-- material design magic for canvas fade ins -->
 
   }
+}
+
+@media screen and (max-height: $default-height-breakpoint) {
+  main { padding-top: 62px; padding-left: 264px }
 }
