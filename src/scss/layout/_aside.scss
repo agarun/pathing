@@ -6,6 +6,7 @@ body {
 }
 
 aside {
+  z-index: 1;
   padding-top: $logo-top-height;
   display: flex;
   flex-flow: column nowrap;
