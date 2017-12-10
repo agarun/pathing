@@ -82,10 +82,19 @@ aside {
 // TODO search fill animation triggered by maze generation. start out as gray with no hover?
 // TODO https://freebiesupply.com/blog/css-button-hover-effects/
 // TODO star trek, button.cs, bubble
-.search-btn, .btn {
+// .button {
+//   background-position: 0 -50%;
+//   background-repeat: repeat-x;
+//     transition: background-position .75s ease;
+//
+//     &:hover {
+//     background-position: 100% 60%;
+//     color: white !important;
+//   }
+
+button {
   margin: 4px 2px;
   padding: 7px;
-  background: $strong-orange;
   font-size: 0.72em;
   font-weight: 700;
   font-family: 'Roboto', sans-serif;
@@ -97,10 +106,26 @@ aside {
   cursor: pointer;
   box-shadow: 0 -2px 0 rgba(0, 0, 0, 0.22) inset;
   transition: 0.12s ease-out;
+}
 
+.disabled, .disabled:hover, .disabled:focus, .disabled:active {
+  background: lighten($strong-orange, 25%);
+}
+
+.search-btn, .btn {
+  background: $strong-orange;
   &:hover {
     background-color: lighten($strong-orange, 25%);
     transition: 0.12s ease-out;
+  }
+}
+
+.search-btn {
+  animation: 3s ease-in 1s 1 forwards maze-gen-done;
+
+  @keyframes maze-gen-done {
+    0% { background-color: red; }
+    100% { background-color: green; }
   }
 }
 

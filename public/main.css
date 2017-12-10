@@ -133,10 +133,9 @@ aside {
     border-radius: 3px;
     box-shadow: 0 -2px 0 rgba(0, 0, 0, 0.22) inset; }
 
-.search-btn, .btn {
+button {
   margin: 4px 2px;
   padding: 7px;
-  background: #f09d18;
   font-size: 0.72em;
   font-weight: 700;
   font-family: 'Roboto', sans-serif;
@@ -148,9 +147,24 @@ aside {
   cursor: pointer;
   box-shadow: 0 -2px 0 rgba(0, 0, 0, 0.22) inset;
   transition: 0.12s ease-out; }
+
+.disabled, .disabled:hover, .disabled:focus, .disabled:active {
+  background: #f8d090; }
+
+.search-btn, .btn {
+  background: #f09d18; }
   .search-btn:hover, .btn:hover {
     background-color: #f8d090;
     transition: 0.12s ease-out; }
+
+.search-btn {
+  animation: 3s ease-in 1s 1 forwards maze-gen-done; }
+
+@keyframes maze-gen-done {
+  0% {
+    background-color: red; }
+  100% {
+    background-color: green; } }
 
 .search-btn:focus {
   background-color: #f8d090; }

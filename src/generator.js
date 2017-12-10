@@ -138,19 +138,23 @@ class MazeGenerator {
       if (this.tree.progress === CNS.PROGRESS) { // every node in graph.collection is discovered
         clearInterval(timer);
         this.image = this.ctx.getImageData(0, 0, CNS.WIDTH, CNS.HEIGHT);
-        this.flashButtons();
+        this.buttonColorFill();
       }
     }, time);
     return timer; // access to setInterval ID to permit clearInterval in other scopes
   }
 
-  flashButtons() {
-    document.getElementById('bfs').classList.add('flash');
-    document.getElementById('dfs').classList.add('flash');
-    setTimeout(() => {
-      document.getElementById('bfs').classList.remove('flash');
-      document.getElementById('dfs').classList.remove('flash');
-    }, 7000);
+  //
+  buttonColorFill() {
+    // CNS.searchTypes.keys.forEach(document.getElementById.classList.remove('disabled'));
+    ['bfs', 'dfs',]
+    // button class disabled -> button class search (remove disabled from all buttons)
+    // document.getElementById('bfs').classList.add('flash');
+    // document.getElementById('dfs').classList.add('flash');
+    // setTimeout(() => {
+    //   document.getElementById('bfs').classList.remove('flash');
+    //   document.getElementById('dfs').classList.remove('flash');
+    // }, 7000);
   }
 }
 

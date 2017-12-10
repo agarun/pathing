@@ -6,20 +6,26 @@ import MazeGenerator from './generator';
 import Draw from './draw';
 import * as CNS from './constants';
 
+const searchTypes = {
+  bfs: BreadthFirstSearch,
+  dfs: DepthFirstSearch,
+  dijkstra: Dijkstra,
+  // astar: AStar,
+};
+
+document.getElementById('search-nav').addEventListener('click', doSearch, false);
+document.getElementById('generate').addEventListener('click', generateMaze, false);
+document.getElementById('randomize').addEventListener('click', randomizeStartAndEnd, false);
+
 const canvas = document.getElementById('canvas');
 canvas.width = CNS.WIDTH;
 canvas.height = CNS.HEIGHT;
-
 const ctx = canvas.getContext('2d');
 const draw = new Draw(canvas, canvas.getContext('2d'));
 
-document.addEventListener('DOMContentLoaded', () => {
-  generateMaze(); // begin drawing maze on page load
-}, false);
-document.getElementById('bfs').addEventListener('click', doSearch, false);
-document.getElementById('dfs').addEventListener('click', doSearch, false);
-document.getElementById('generate').addEventListener('click', generateMaze, false);
-document.getElementById('randomize').addEventListener('click', randomizeStartAndEnd, false);
+// begin drawing maze on page load
+// FIXME: why callback?
+document.addEventListener('DOMContentLoaded', () => generateMaze(), false);
 
 // TODO: might be able to simplify because i'm passing event target so i dont need
 // to check current class. also repeat this for #search btn overlay.
@@ -106,48 +112,34 @@ function resetSearch() {
   clearInterval(intervalId);
   Object.keys(minSpanTree).forEach((position) => {
     if (minSpanTree[position].length !== undefined) {
-      minSpanTree[position].forEach(i => i[1].visited = false);
+      minSpanTree[position].forEach(n => n[1].visited = false);
     }
   });
 }
 
-function doSearch() {
-  const id = this.id;
+function doSearch(event) {
+  const id = event.target.id;
+  if (id === 'search-nav') return;
 
   // the graph's complete image exists when the maze has fully generated
   if (graph.image) {
     resetSearch();
     ctx.putImageData(graph.image, 0, 0);
 
+    // TODO: helper function?
     if (start === null || end === null) {
       defaultStartAndEnd();
     } else {
       draw.drawEnds([start, end]); // redraw start & end so they overlap on the canvas
     }
 
-    // TODO: programatically trigger different search algorithms
-    if (id === 'bfs') {
-      // FIXME: DEBUG REMOVE
-      defaultStartAndEnd();
-      const x = new Dijkstra(canvas, minSpanTree, start, end);
-      x.search();
-      // FIXME: DEBUG REMOVE
-      // searchAlgorithm = new BreadthFirstSearch(
-      //   canvas,
-      //   minSpanTree,
-      //   start,
-      //   end,
-      // );
-      // intervalId = searchAlgorithm.search();
-    } else if (id === 'dfs') {
-      searchAlgorithm = new DepthFirstSearch(
-        canvas,
-        minSpanTree,
-        start,
-        end,
-      );
-      intervalId = searchAlgorithm.search();
-    }
+    searchAlgorithm = new searchTypes[id](
+      canvas,
+      minSpanTree,
+      start,
+      end,
+    );
+    intervalId = searchAlgorithm.search();
   } else {
     console.log("can't search before building a maze");
   }

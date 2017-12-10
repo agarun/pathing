@@ -52,7 +52,7 @@ class BreadthFirstSearch {
           }
 
           if (!neighbor.visited) {
-            queue.push(`${neighbor.x}, ${neighbor.y}`); // FIXME ?? i changed this.queue to queue
+            queue.push(`${neighbor.x}, ${neighbor.y}`);
             neighbor.visited = true;
             meta[key] = [[graph[currentNode][i][0], currentNode]];
           }
@@ -62,7 +62,7 @@ class BreadthFirstSearch {
         clearInterval(timer);
         return console.log('no solution in this direction');
       }
-    }, 10);
+    }, 5);
     // allow choosing a new search while another search is running:
     // return access to setInterval ID to permit clearInterval on that ID
     return timer;

@@ -54,7 +54,7 @@ class DepthFirstSearch {
           }
 
           if (!neighbor.visited) {
-            stack.push(`${neighbor.x}, ${neighbor.y}`); // FIXME ?? i changed this.stack to stack
+            stack.push(`${neighbor.x}, ${neighbor.y}`);
             neighbor.visited = true;
             meta[key] = [[graph[currentNode][i][0], currentNode]];
           }
