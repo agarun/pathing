@@ -24,7 +24,7 @@ module.exports = {
     ],
   },
   plugins: [
-    // new UglifyJSPlugin(),
+    new UglifyJSPlugin(),
     new ExtractTextPlugin('main.css'),
   ],
   target: 'node',
