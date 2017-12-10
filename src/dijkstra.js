@@ -1,5 +1,14 @@
 import Draw from './draw';
 
+// Uniform-cost search (UCS) - a variant of Dijkstra's algorithm that terminates
+// as soon as the target node is discovered. It does not lazily fill the
+// priority queue with infinite-cost nodes and it does not explore/store
+// all nodes for reuse. In the more typical Dijkstra's algorithm, we
+// expect to also implement a `decrease-key` operation for the priority queue.
+
+// Getting a UCS from Dijkstra's algorithm is useful here to conserve
+// space in the `PriorityQueue` on initialization.
+
 // in a Priority Queue, elements (nodes) with high priority (lower cost)
 // are served before elements with lower priority (higher cost).
 // this code uses a binary heap-based priority queue package 'js-priority-queue'.
@@ -38,17 +47,19 @@ class Dijkstra {
 
     // helper method
     // for each vertex v in graph, dist[v] is infinity and prev[v] is null
-    // priority queue here as well
+    // graph.forEach((nodeData) => {
+    //   const node = nodeData[0].nodeFrom;
+    //   distances[node] = Infinity;
+    //   priorityQueue.queue(node);
+    // });
 
+    // explain these 2
     distances[source] = 0;
+    prev[source] = null;
     priorityQueue.queue(source);
     const timer = setInterval(() => {
       if (priorityQueue.length) {
-        // if (distances[currentNode] === undefined) distances[currentNode] = Infinity;
         const currentNode = priorityQueue.dequeue();
-
-        // FIXME
-        // we need a way to visit the vertex with the smallest known distance/cost.
 
         const neighbors = graph[currentNode];
         for (let i = 0; i < neighbors.length; i += 1) {
@@ -70,7 +81,7 @@ class Dijkstra {
 
           // a visited node will never be checked again
           // TODO: might want to do this when setting currentNode
-          if (neighbor.visited) continue;
+          // if (neighbor.visited) return;
 
           // consider every neighbor and calculate potential distances:
           // for each, store the distance to the currentNode
@@ -82,8 +93,9 @@ class Dijkstra {
           }
         }
 
-        // graph[currentNode][]  -----> SET VISITED. idk how to do this LUL
-
+        // the visited state is stored on the node itself for simplicity
+        // in all my implementations.
+        // set visited state!
       } else {
         // else if target is not in the graph <- MSTs connect all vertices.
         clearInterval(timer);
@@ -95,7 +107,15 @@ class Dijkstra {
     return timer;
   }
 
-  reconstructShortestPath() {
+  shortestPath() {
+    let predecessor = this.target;
+    while (predecessor !== this.source) {
+      this.draw.drawPath(this.meta[predecessor], 'solution', true);
+      predecessor = this.previous[predecessor];
+    }
+    // redraw start & end on the solution backtrace to overlap the path for visibility
+    this.draw.drawEnds([this.source, this.target]);
+    this.searching = 0;
   }
 }
 
