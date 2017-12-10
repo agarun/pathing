@@ -144,17 +144,11 @@ class MazeGenerator {
     return timer; // access to setInterval ID to permit clearInterval in other scopes
   }
 
-  //
   buttonColorFill() {
-    // CNS.searchTypes.keys.forEach(document.getElementById.classList.remove('disabled'));
-    ['bfs', 'dfs',]
-    // button class disabled -> button class search (remove disabled from all buttons)
-    // document.getElementById('bfs').classList.add('flash');
-    // document.getElementById('dfs').classList.add('flash');
-    // setTimeout(() => {
-    //   document.getElementById('bfs').classList.remove('flash');
-    //   document.getElementById('dfs').classList.remove('flash');
-    // }, 7000);
+    ['bfs', 'dfs', 'dijkstra', 'astar'].forEach((id) => {
+      document.getElementById(id).classList.remove('disabled');
+      document.getElementById(id).classList.add('search-btn');
+    });
   }
 }
 

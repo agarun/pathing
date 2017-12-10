@@ -146,25 +146,17 @@ button {
   border-radius: 4px;
   cursor: pointer;
   box-shadow: 0 -2px 0 rgba(0, 0, 0, 0.22) inset;
-  transition: 0.12s ease-out; }
+  transition: 5s ease-out; }
 
 .disabled, .disabled:hover, .disabled:focus, .disabled:active {
-  background: #f8d090; }
+  background: #b6ac9e; }
 
 .search-btn, .btn {
+  transition: 0.5s ease-out;
   background: #f09d18; }
   .search-btn:hover, .btn:hover {
     background-color: #f8d090;
     transition: 0.12s ease-out; }
-
-.search-btn {
-  animation: 3s ease-in 1s 1 forwards maze-gen-done; }
-
-@keyframes maze-gen-done {
-  0% {
-    background-color: red; }
-  100% {
-    background-color: green; } }
 
 .search-btn:focus {
   background-color: #f8d090; }
