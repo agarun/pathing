@@ -53,13 +53,14 @@ Both BFS and DFS have simple iterative implementations. BFS makes use of a queue
 ## Plans
 
 - Visualize the graph during generation and traversal using [Sigma.js](http://sigmajs.org/)
-- Dijkstra
-  - Use the uniform-cost implementation to reduce priority queue operations, discussed [here](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs) and [here](https://www.redblobgames.com/pathfinding/a-star/implementation.html#python-dijkstra). The uniform-cost search does not initialize all nodes in the priority queue; it initializes the PQ with only the source node and inserts new nodes as they are discovered (adjusting the key cost as necessary).
 - Randomized Prim's algorithm
   - Implement a min-heap
 - Implement hexagonal maze generation ([here](https://www.redblobgames.com/grids/hexagons/) for an incredibly useful introduction to hexagonal grids)
 
 # References
+* Uniform-cost search and Dijkstra's algorithm
+  * [Wiki: Dijkstra optimizations](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs)  
+  * [Red Blob Games](https://www.redblobgames.com/pathfinding/a-star/implementation.html#python-dijkstra)  
 * Red Blob Games
   * [Grids and Graphs](http://www.redblobgames.com/pathfinding/grids/graphs.html)
   * [Pathfinding](http://www.redblobgames.com/pathfinding/tower-defense/index.html)
