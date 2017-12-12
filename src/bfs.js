@@ -62,7 +62,7 @@ class BreadthFirstSearch {
         clearInterval(timer);
         return console.log('no solution in this direction');
       }
-    }, 5);
+    }, 7);
     // allow choosing a new search while another search is running:
     // return access to setInterval ID to permit clearInterval on that ID
     return timer;

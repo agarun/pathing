@@ -29,7 +29,8 @@ class DepthFirstSearch {
       if (stack.length) {
         const currentNode = stack.pop();
 
-        // draw the current node being visited and the passage that was used to get there
+        // draw the current node being visited and
+        // the passage that was used to get there
         if (Object.keys(meta).length) {
           this.draw.drawPath([[meta[currentNode][0][0], currentNode]], 'visit');
         }
@@ -46,6 +47,9 @@ class DepthFirstSearch {
           const key = `${neighbor.x}, ${neighbor.y}`;
 
           // if one of the neighbors is the target, break & draw the path
+          // since `meta` information is used for drawing path & solution,
+          // store the current neighboring edge and the curretNode at the
+          // currentNode's stringified key.
           if (key === target) {
             this.draw.drawNode(key);
             meta[key] = [[graph[currentNode][i][0], currentNode]];

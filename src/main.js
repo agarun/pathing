@@ -2,6 +2,7 @@ import './scss/main.scss';
 import BreadthFirstSearch from './bfs';
 import DepthFirstSearch from './dfs';
 import Dijkstra from './dijkstra';
+import AStar from './astar';
 import MazeGenerator from './generator';
 import Draw from './draw';
 import * as CNS from './constants';
@@ -10,7 +11,7 @@ const searchTypes = {
   bfs: BreadthFirstSearch,
   dfs: DepthFirstSearch,
   dijkstra: Dijkstra,
-  // astar: AStar,
+  astar: AStar,
 };
 
 document.getElementById('search-nav').addEventListener('click', doSearch, false);
@@ -24,14 +25,11 @@ const ctx = canvas.getContext('2d');
 const draw = new Draw(canvas, canvas.getContext('2d'));
 
 // begin drawing maze on page load
-// FIXME: why callback?
+// FIXME: why use a callback?
 document.addEventListener('DOMContentLoaded', () => generateMaze(), false);
 
-// TODO: might be able to simplify because i'm passing event target so i dont need
-// to check current class. also repeat this for #search btn overlay.
 const toggleActive = (event) => {
-  const jumpElement = event.target;
-  if (jumpElement.getAttribute('class') === 'jump') {
+  if (event.target.getAttribute('class') === 'jump') {
     document.querySelectorAll('.jump').forEach((anchor) => {
       anchor.classList.toggle('active');
     });
@@ -52,13 +50,14 @@ function generateMaze() {
   // flush the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
+  // TODO: probably don't need an if statement here. just clear.
   // if this isn't the first time running generateMaze(), cancel the last attempt
   if (intervalId !== undefined) clearInterval(intervalId);
 
   // run randomized prim's algorithm to generate a maze
   const doPrims = function doPrims() {
     const maze = new MazeGenerator(canvas);
-    const grid = maze.grid();
+    maze.grid();
     const timerId = maze.build();
     graph = maze;
     minSpanTree = maze.tree;
@@ -66,6 +65,7 @@ function generateMaze() {
   };
   intervalId = doPrims();
 
+  // TODO: possibly use resetSearchSettings() and resetSearchState()
   // reset all search states and flush start and end points (user can repeat searches)
   searchAlgorithm.searching = 0;
   [start, end] = [null, null];
@@ -75,7 +75,6 @@ function generateMaze() {
 function defaultStartAndEnd() {
   start = '0, 0';
   end = `${CNS.WIDTH - CNS.BLOCKWIDTH}, ${CNS.HEIGHT - CNS.BLOCKWIDTH}`;
-  draw.drawEnds([start, end]);
 }
 
 function randomizeStartAndEnd() {
@@ -84,13 +83,12 @@ function randomizeStartAndEnd() {
     return console.log('wait for a search to terminate before choosing new endpoints');
   }
 
-  // picks random start & end nodes, with arbitrary bias for each choice via `slice(..)`
+  // pick random start & end nodes with arbitrary bias by slicing
   const randomNodes = function randomNodes() {
     const nodes = Object.keys(minSpanTree);
     const pick = n => n[Math.floor(Math.random() * n.length)];
 
-    let choiceOne;
-    let choiceTwo;
+    let choiceOne, choiceTwo;
     while (choiceOne === choiceTwo || choiceOne === 'progress' || choiceTwo === 'progress') {
       choiceOne = pick(nodes.slice(0, 50));
       choiceTwo = pick(nodes.slice(1250));
@@ -104,6 +102,14 @@ function randomizeStartAndEnd() {
     ctx.putImageData(graph.image, 0, 0);
     draw.drawEnds([start, end]);
   }
+}
+
+function drawStartAndEnd() {
+  if (start === null || end === null) {
+    defaultStartAndEnd();
+  }
+  // redraw start & end so they overlap on the canvas
+  draw.drawEnds([start, end]);
 }
 
 // a search's running state is stored in an intervalId: clear any available ID
@@ -121,17 +127,11 @@ function doSearch(event) {
   const id = event.target.id;
   if (id === 'search-nav') return;
 
-  // the graph's complete image exists when the maze has fully generated
+  // graph image exists when the maze has fully generated
   if (graph.image) {
     resetSearch();
     ctx.putImageData(graph.image, 0, 0);
-
-    // TODO: helper function?
-    if (start === null || end === null) {
-      defaultStartAndEnd();
-    } else {
-      draw.drawEnds([start, end]); // redraw start & end so they overlap on the canvas
-    }
+    drawStartAndEnd();
 
     searchAlgorithm = new searchTypes[id](
       canvas,
