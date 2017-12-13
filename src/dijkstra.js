@@ -1,18 +1,20 @@
 import Draw from './draw';
 
-// Uniform-cost search (UCS) - a variant of Dijkstra's algorithm that terminates
-// as soon as the target node is discovered. It does not lazily fill the
-// priority queue with infinite-cost nodes and it does not explore/store
-// all nodes for reuse. In the more typical Dijkstra's algorithm, we
-// expect to also implement a `decrease-key` operation for the priority queue.
+// Uniform-cost search (UCS), one common variant of Dijkstra's algorithm that
+// 'inserts' nodes and terminates as soon as the target node is discovered.
+// Dijkstra's algorithm can also be implemented with a `decrease-key` operation for
+// the priority queue. In the `decrease-key` version, the priority queue is initialized
+// with infinite-cost nodes and there is *no* early exit when the target is discovered.
 
-// Getting a UCS from Dijkstra's algorithm is useful here to conserve
-// space in the `PriorityQueue` on initialization.
+// The uniform-cost search initializes the PQ with only the source node and inserts
+// new nodes as they are discovered. This is useful when searching for a target node.
+// Getting a UCS from Dijkstra's algorithm conserves space in the Priority Queue.
 
-// in a Priority Queue, elements (nodes) with high priority (lower cost)
+// In a Priority Queue, elements (nodes) with high priority (lower cost)
 // are served before elements with lower priority (higher cost).
-// this code uses a binary heap-based priority queue package 'js-priority-queue'.
-// Google also includes a heap-based PQ implementation in the Closure Library
+// this implementation uses a binary heap-based priority queue module 'js-priority-queue':
+// (https://github.com/adamhooper/js-priority-queue)
+// Google also includes a heap-based PQ implementation in the Closure Library:
 // (https://github.com/google/closure-library/tree/master/closure/goog/structs)
 const PriorityQueue = require('js-priority-queue');
 
@@ -33,7 +35,7 @@ class Dijkstra {
 
     // use a priority queue in which vertices are sorted by their increasing cost
     this.priorityQueue = new PriorityQueue({
-      comparator: (edgeOne, edgeTwo) => edgeOne.weight - edgeTwo.weight,
+      comparator: currentNode => this.distances[currentNode]
     });
   }
 
@@ -44,22 +46,31 @@ class Dijkstra {
     const target = this.target;
     const priorityQueue = this.priorityQueue;
     const distances = this.distances;
+    const previous = this.previous;
 
-    // helper method
-    // for each vertex v in graph, dist[v] is infinity and prev[v] is null
-    // graph.forEach((nodeData) => {
-    //   const node = nodeData[0].nodeFrom;
-    //   distances[node] = Infinity;
-    //   priorityQueue.queue(node);
-    // });
-
-    // explain these 2
+    // initialize the PQ with the stringified source node and insert new nodes when
+    // they are visited. if the next node is in the Q, decrease its
     distances[source] = 0;
-    prev[source] = null;
+    previous[source] = null;
     priorityQueue.queue(source);
+
     const timer = setInterval(() => {
       if (priorityQueue.length) {
+        // remove the item w/ the min. cost, based on random edge weights from Prim's
         const currentNode = priorityQueue.dequeue();
+
+        // in the minimum spanning tree:
+        // graph[currentNode]
+        //   * `x, y`: [[Edge, Node], [Edge, Node] ...]
+        //      * currentNode (stringified)
+        //             * Edge.nodeFrom (node traveled from to get to currentNode)
+        //             * Edge.nodeTo (currentNode instance)
+        //                   * Node (neighbor node instance)
+        //                      * the `visited` state is stored on the node itself
+        const edgeToCurrentNode = graph[currentNode][0][0];
+        this.draw.drawPath([[edgeToCurrentNode, currentNode]], 'visit');
+        if (!previous.length) edgeToCurrentNode.nodeFrom.visited = true;
+        edgeToCurrentNode.nodeTo.visited = true;
 
         const neighbors = graph[currentNode];
         for (let i = 0; i < neighbors.length; i += 1) {
@@ -68,34 +79,29 @@ class Dijkstra {
           // graph[currentNode][i][0] => stores the neighbor node
           const neighborEdge = neighbors[i][0];
           const neighbor = neighbors[i][1];
+          const neighborKey = `${neighbor.x}, ${neighbor.y}`;
 
-          // console.log(neighbors[i]);
-          // console.log(neighbor);
-          // console.log(neighborEdge);
-          const key = `${neighbor.x}, ${neighbor.y}`;
+          // consider every neighbor and calculate cost:
+          // distance to the currentNode + the edge weight to the current neighbor
+          const distanceToNeighborNode = distances[currentNode] + neighborEdge.weight;
+          if (!neighbor.visited ||
+            distances[neighborKey] === undefined ||
+            distanceToNeighborNode < distances[neighborKey]) {
+            // queue the node if it was not yet discovered (no distance). typically,
+            // the queue operation takes place if the node already exists in the
+            // PQ, but it's not absolutely necessary and dupes are uncommon.
+            // re-queuing the node will not negatively affect the result or runtime.
+            priorityQueue.queue(neighborKey);
+            distances[neighborKey] = distanceToNeighborNode;
+            previous[neighborKey] = [[neighborEdge, currentNode]];
+          }
 
           // if one of the neighbors is the target, break & draw the path
-          if (key === target) {
-            console.log('solution discovered');
-          }
-
-          // a visited node will never be checked again
-          // TODO: might want to do this when setting currentNode
-          // if (neighbor.visited) return;
-
-          // consider every neighbor and calculate potential distances:
-          // for each, store the distance to the currentNode
-          // + the edge weight to the current neighbor
-          // Euclidean distance?
-          const distanceToNeighborNode = distances[currentNode] + neighborEdge.weight;
-          if (distances[neighbor] < distanceToNeighborNode) {
-            distances[neighbor] = distanceToNeighborNode;
+          if (neighborKey === target) {
+            clearInterval(timer);
+            return this.shortestPath();
           }
         }
-
-        // the visited state is stored on the node itself for simplicity
-        // in all my implementations.
-        // set visited state!
       } else {
         // else if target is not in the graph <- MSTs connect all vertices.
         clearInterval(timer);
@@ -110,8 +116,9 @@ class Dijkstra {
   shortestPath() {
     let predecessor = this.target;
     while (predecessor !== this.source) {
-      this.draw.drawPath(this.meta[predecessor], 'solution', true);
-      predecessor = this.previous[predecessor];
+      this.draw.drawPath(this.previous[predecessor], 'solution', true);
+      const previousNode = this.previous[predecessor][0];
+      predecessor = previousNode[1];
     }
     // redraw start & end on the solution backtrace to overlap the path for visibility
     this.draw.drawEnds([this.source, this.target]);
