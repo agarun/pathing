@@ -26,6 +26,7 @@ const draw = new Draw(canvas, canvas.getContext('2d'));
 
 // begin drawing maze on page load
 // FIXME: why use a callback?
+// maybe settimeout on domcontentloaded maze gen ? to delay it a little bit
 document.addEventListener('DOMContentLoaded', () => generateMaze(), false);
 
 const toggleActive = (event) => {

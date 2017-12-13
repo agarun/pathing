@@ -24,7 +24,7 @@ class Draw {
 
   drawPath(nodes, style, force) {
     this.ctx.fillStyle = style === 'visit' ? CNS.VISITCOLOR : CNS.SOLUTIONCOLOR;
-
+    
     nodes.forEach((node) => {
       const edgeId = `${node[0].nodeFrom.x} ${node[0].nodeFrom.y} ${node[0].nodeTo.x} ${node[0].nodeTo.y}`;
       if (!this.drawn[edgeId] || force) {

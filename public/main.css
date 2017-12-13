@@ -77,6 +77,7 @@ body {
   color: #e6e6e6; }
 
 aside {
+  z-index: 1;
   padding-top: 100px;
   display: flex;
   flex-flow: column nowrap;
@@ -149,7 +150,9 @@ button {
   transition: 5s ease-out; }
 
 .disabled, .disabled:hover, .disabled:focus, .disabled:active {
-  background: #b6ac9e; }
+  background: #b6ac9e;
+  user-select: none;
+  cursor: default; }
 
 .search-btn, .btn {
   transition: 0.5s ease-out;
@@ -214,6 +217,17 @@ footer {
 main {
   padding-top: 196px;
   padding-left: 300px; }
+  main canvas {
+    animation-duration: 0.2s;
+    animation-name: fadeInLeft; }
+
+@keyframes fadeInLeft {
+  from {
+    opacity: 0;
+    transform: translate3d(-100%, 0, 0); }
+  to {
+    opacity: 1;
+    transform: none; } }
 
 @media screen and (max-height: 800px) {
   main {

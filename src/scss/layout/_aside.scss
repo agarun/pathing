@@ -98,6 +98,8 @@ button {
 
 .disabled, .disabled:hover, .disabled:focus, .disabled:active {
   background: rgb(182, 172, 158);
+  user-select: none;
+  cursor: default;
 }
 
 .search-btn, .btn {
