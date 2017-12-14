@@ -6,6 +6,10 @@ import Draw from './draw';
 // the priority queue. In the `decrease-key` version, the priority queue is initialized
 // with infinite-cost nodes and there is *no* early exit when the target is discovered.
 
+// Dijkstra's algorithm only uses one cost function: the real min cost to
+// reach a node from the source node. It's considered a special case of A* search,
+// since it has no heuristic function.
+
 // The uniform-cost search initializes the PQ with only the source node and inserts
 // new nodes as they are discovered. This is useful when searching for a target node.
 // Getting a UCS from Dijkstra's algorithm conserves space in the Priority Queue.
@@ -34,9 +38,10 @@ class Dijkstra {
     this.distances = {};
 
     // use a priority queue in which vertices are sorted by their increasing cost
-    this.priorityQueue = new PriorityQueue({
-      comparator: currentNode => this.distances[currentNode]
-    });
+    const compareDistances = (node1, node2) => {
+      return this.distances[node1] - this.distances[node2];
+    };
+    this.priorityQueue = new PriorityQueue({ comparator: compareDistances });
   }
 
   search() {
@@ -56,7 +61,7 @@ class Dijkstra {
 
     const timer = setInterval(() => {
       if (priorityQueue.length) {
-        // remove the item w/ the min. cost, based on random edge weights from Prim's
+        // remove the item w/ the min. cost based on random edge weights after Prim's
         const currentNode = priorityQueue.dequeue();
 
         // in the minimum spanning tree:
@@ -87,8 +92,7 @@ class Dijkstra {
           if (!neighbor.visited ||
             distances[neighborKey] === undefined ||
             distanceToNeighborNode < distances[neighborKey]) {
-            // queue the node if it was not yet discovered (no distance). typically,
-            // the queue operation takes place if the node already exists in the
+            // typically the queue operation takes place only if the node already exists in the
             // PQ, but it's not absolutely necessary and dupes are uncommon.
             // re-queuing the node will not negatively affect the result or runtime.
             priorityQueue.queue(neighborKey);
@@ -101,6 +105,7 @@ class Dijkstra {
             clearInterval(timer);
             return this.shortestPath();
           }
+          console.log(distances);
         }
       } else {
         // else if target is not in the graph <- MSTs connect all vertices.
