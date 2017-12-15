@@ -79,11 +79,11 @@ class Dijkstra {
 
         const neighbors = graph[currentNode];
         for (let i = 0; i < neighbors.length; i += 1) {
-          // graph[currentNode][i][0] => stores the edge to the neighbor node
+          // graph[currentNode][i][1] => stores the edge to the neighbor node
           // (and this edge stores references to `nodeFrom` and `nodeTo`)
           // graph[currentNode][i][0] => stores the neighbor node
-          const neighborEdge = neighbors[i][0];
           const neighbor = neighbors[i][1];
+          const neighborEdge = neighbors[i][0];
           const neighborKey = `${neighbor.x}, ${neighbor.y}`;
 
           // consider every neighbor and calculate cost:

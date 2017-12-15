@@ -19,7 +19,6 @@ class AStar {
     this.prios = {};
 
     // use a priority queue in which vertices are sorted by their increasing cost
-    // FIXME this comparator isnt working.
     const compareDistances = (node1, node2) => {
       return this.prios[node1] - this.prios[node2];
     };
@@ -73,11 +72,11 @@ class AStar {
 
         const neighbors = graph[currentNode];
         for (let i = 0; i < neighbors.length; i += 1) {
-          // graph[currentNode][i][0] => stores the edge to the neighbor node
+          // graph[currentNode][i][1] => stores the edge to the neighbor node
           // (and this edge stores references to `nodeFrom` and `nodeTo`)
           // graph[currentNode][i][0] => stores the neighbor node
-          const neighborEdge = neighbors[i][0];
           const neighbor = neighbors[i][1];
+          const neighborEdge = neighbors[i][0];
           const neighborKey = `${neighbor.x}, ${neighbor.y}`;
 
           // In A* search, the shortest path is discovered by finding the minimum

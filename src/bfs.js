@@ -33,20 +33,21 @@ class BreadthFirstSearch {
           this.draw.drawPath(graph[currentNode], 'visit');
         }
 
-        // grab each neighbor node of the current cell and stringify as a `key`
+        // grab each neighbor node of the current cell and stringify as a `neighborKey`
         // graph[currentNode] stores the neighbors in the adjacency lists,
         // represented by [[northEdge, node], [eastEdge, node] ...]
-        // graph[currentNode][i][0] => stores the edge to the neighbor node
-        // (and this edge stores references to `nodeFrom` and `nodeTo`)
-        // graph[currentNode][i][0] => stores the neighbor node
         const neighbors = graph[currentNode];
         for (let i = 0; i < neighbors.length; i += 1) {
+          // graph[currentNode][i][1] => stores the edge to the neighbor node
+          // (and this edge stores references to `nodeFrom` and `nodeTo`)
+          // graph[currentNode][i][0] => stores the neighbor node
           const neighbor = neighbors[i][1];
-          const key = `${neighbor.x}, ${neighbor.y}`;
+          const neighborEdge = neighbors[i][0];
+          const neighborKey = `${neighbor.x}, ${neighbor.y}`;
 
           // if one of the neighbors is the target, break & draw the solution path
-          if (key === target) {
-            meta[key] = [[graph[currentNode][i][0], currentNode]];
+          if (neighborKey === target) {
+            meta[neighborKey] = [[neighborEdge, currentNode]];
             clearInterval(timer);
             return this.path();
           }
@@ -54,7 +55,7 @@ class BreadthFirstSearch {
           if (!neighbor.visited) {
             queue.push(`${neighbor.x}, ${neighbor.y}`);
             neighbor.visited = true;
-            meta[key] = [[graph[currentNode][i][0], currentNode]];
+            meta[neighborKey] = [[neighborEdge, currentNode]];
           }
         }
       } else {
