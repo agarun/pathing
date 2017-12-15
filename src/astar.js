@@ -19,20 +19,22 @@ class AStar {
     this.prios = {};
 
     // use a priority queue in which vertices are sorted by their increasing cost
+    // including the heuristic (part heuristic part edge)
     const compareDistances = (node1, node2) => {
       return this.prios[node1] - this.prios[node2];
     };
     this.priorityQueue = new PriorityQueue({ comparator: compareDistances });
   }
 
-  // standard heuristic for a square grid. we scale the distance simply (by 1)
+  // TODO: Is this heuristic admissible? Change the `D`?
+  // heuristic for a square grid (4 directions). TODO: discuss Manhattan distance
   static manhattanDistance(neighbor, target) {
     const [x1, y1] = target.split(', ');
     const [x2, y2] = neighbor.split(', ');
 
     const dx = Math.abs(x2 - x1);
     const dy = Math.abs(y2 - y1);
-    return (dx + dy); // TODO: scale by 10**-3
+    return (10 ** -1.25) * (dx + dy);
   }
 
   search() {
@@ -53,8 +55,6 @@ class AStar {
     const timer = setInterval(() => {
       if (priorityQueue.length) {
         // remove the item w/ the min. cost based on random edge weights after Prim's
-        console.log('this is the pq');
-        console.log(priorityQueue);
         const currentNode = priorityQueue.dequeue();
 
         // in the minimum spanning tree:
@@ -93,11 +93,13 @@ class AStar {
             // PQ, but it's not absolutely necessary and dupes are uncommon.
             // re-queuing the node will not negatively affect the result or runtime.
             priorityQueue.queue(neighborKey);
-            distances[neighborKey] = distanceToNeighborNode;
-            const priority =
-              distanceToNeighborNode + this.constructor.manhattanDistance(neighborKey, target);
 
-            this.prios[neighborKey] = priority;
+            distances[neighborKey] = distanceToNeighborNode;
+            const priority = this.constructor.manhattanDistance(neighborKey, target);
+            console.log(`prio: ${priority}`);
+            console.log(`dist: ${distanceToNeighborNode}`);
+            this.prios[neighborKey] = distances[neighborKey] + priority;
+
             previous[neighborKey] = [[neighborEdge, currentNode]];
           }
 

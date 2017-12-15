@@ -96,6 +96,7 @@ class Dijkstra {
             // PQ, but it's not absolutely necessary and dupes are uncommon.
             // re-queuing the node will not negatively affect the result or runtime.
             priorityQueue.queue(neighborKey);
+            
             distances[neighborKey] = distanceToNeighborNode;
             previous[neighborKey] = [[neighborEdge, currentNode]];
           }
