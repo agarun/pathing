@@ -36,7 +36,7 @@ const SOLUTIONCOLOR = '#ffe600';
 const STARTCOLOR = '#4d9803';
 const ENDCOLOR = '#870741';
 
-export {
+export default {
   WIDTH,
   HEIGHT,
   CELLSIZE,

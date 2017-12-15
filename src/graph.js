@@ -1,4 +1,4 @@
-import * as CNS from './constants';
+import CNS from './constants';
 
 class Graph {
   constructor() {

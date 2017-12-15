@@ -5,7 +5,7 @@ import Dijkstra from './dijkstra';
 import AStar from './astar';
 import MazeGenerator from './generator';
 import Draw from './draw';
-import * as CNS from './constants';
+import CNS from './constants';
 
 const searchTypes = {
   bfs: BreadthFirstSearch,
@@ -25,8 +25,7 @@ const ctx = canvas.getContext('2d');
 const draw = new Draw(canvas, canvas.getContext('2d'));
 
 // begin drawing maze on page load
-// FIXME: why use a callback?
-// maybe settimeout on domcontentloaded maze gen ? to delay it a little bit
+// FIXME: settimeout on callback to delay
 document.addEventListener('DOMContentLoaded', () => generateMaze(), false);
 
 const toggleActive = (event) => {
@@ -51,9 +50,8 @@ function generateMaze() {
   // flush the canvas
   ctx.clearRect(0, 0, canvas.width, canvas.height);
 
-  // TODO: probably don't need an if statement here. just clear.
   // if this isn't the first time running generateMaze(), cancel the last attempt
-  if (intervalId !== undefined) clearInterval(intervalId);
+  clearInterval(intervalId);
 
   // run randomized prim's algorithm to generate a maze
   const doPrims = function doPrims() {

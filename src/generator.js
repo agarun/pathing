@@ -1,6 +1,6 @@
 import { Graph, Node, Edge } from './graph';
 import Draw from './draw';
-import * as CNS from './constants';
+import CNS from './constants';
 
 class MazeGenerator {
   constructor(canvas) {
