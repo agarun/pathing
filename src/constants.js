@@ -1,4 +1,3 @@
-// TODO: add new defaults based on user's viewport
 const WIDTH = 1008;
 const HEIGHT = 624;
 
