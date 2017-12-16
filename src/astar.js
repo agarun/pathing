@@ -19,22 +19,28 @@ class AStar {
     this.prios = {};
 
     // use a priority queue in which vertices are sorted by their increasing cost
-    // including the heuristic (part heuristic part edge)
+    // including the heuristic (part heuristic part edge). A Star is a best-first
+    // search - it chooses the most promising node based on a two-parted cost function
     const compareDistances = (node1, node2) => {
       return this.prios[node1] - this.prios[node2];
     };
     this.priorityQueue = new PriorityQueue({ comparator: compareDistances });
   }
 
-  // TODO: Is this heuristic admissible? Change the `D`?
-  // heuristic for a square grid (4 directions). TODO: discuss Manhattan distance
+  // Manhattan distance is an ideal heuristic for a square grid with only 4 directions.
+  // a heuristic is admissible if it never overestimates the distance/cost
+  // cost of reaching the target node. manhattan distance calculates movement
+  // to nodes based on independent moves in one of 4 directions - it's admissible
+  // because it can never return a higher cost than the min from the `currentNode`.
+  // before returning, scale the heuristic's calculation to accurately represent the
+  // lowest distance between adjacent nodes on the maze grid based on edge costs.
   static manhattanDistance(neighbor, target) {
     const [x1, y1] = target.split(', ');
     const [x2, y2] = neighbor.split(', ');
 
     const dx = Math.abs(x2 - x1);
     const dy = Math.abs(y2 - y1);
-    return (10 ** -1.25) * (dx + dy);
+    return (10 ** -1.4) * (dx + dy);
   }
 
   search() {
