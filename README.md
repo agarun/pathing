@@ -52,15 +52,17 @@ Both BFS and DFS have simple iterative implementations. BFS makes use of a queue
 
 ## Plans
 
+- See previous searches
+- Implement ES6 Promises
 - Visualize the graph during generation and traversal using [Sigma.js](http://sigmajs.org/)
-- Randomized Prim's algorithm
-  - Implement a min-heap
-- Implement hexagonal maze generation ([here](https://www.redblobgames.com/grids/hexagons/) for an incredibly useful introduction to hexagonal grids)
+- Implement a min-heap for randomized Prim's algorithm
+- Implement hexagonal maze generation ([introduction to hexagonal grids](https://www.redblobgames.com/grids/hexagons/))
 
 # References
 * Uniform-cost search and Dijkstra's algorithm
   * [Wiki: Dijkstra optimizations](https://en.wikipedia.org/wiki/Dijkstra%27s_algorithm#Practical_optimizations_and_infinite_graphs)  
   * [Red Blob Games](https://www.redblobgames.com/pathfinding/a-star/implementation.html#python-dijkstra)  
+  * [SO 1](https://stackoverflow.com/questions/17009056/how-to-implement-ologn-decrease-key-operation-for-min-heap-based-priority-queu), [SO 2](https://stackoverflow.com/questions/9255620/why-does-dijkstras-algorithm-use-decrease-key)  
 * Red Blob Games
   * [Grids and Graphs](http://www.redblobgames.com/pathfinding/grids/graphs.html)
   * [Pathfinding](http://www.redblobgames.com/pathfinding/tower-defense/index.html)
@@ -81,5 +83,12 @@ Both BFS and DFS have simple iterative implementations. BFS makes use of a queue
   * [Maze generation visualizations](http://www.algostructure.com/specials/maze.php)
   * [Minimum Spanning Trees visualizations](https://visualgo.net/en/mst?slide=1)
   * [MST and Prim's visualizations](http://www.algomation.com/algorithm/prim-minimum-spanning-tree)
-* Wikipedia
+* Prim's
   * [Randomized Prim's](https://en.wikipedia.org/wiki/Maze_generation_algorithm#Randomized_Prim.27s_algorithm)
+* Priority Queues
+  * [Wiki](https://en.wikipedia.org/wiki/Priority_queue)  
+  * [Google Closure Library](https://google.github.io/closure-library/api/goog.structs.PriorityQueue.html)  
+  * [Visualgo.net Priority Queues & Heaps](https://visualgo.net/en/heap)  
+* A* Search
+  * [SO 1](https://softwareengineering.stackexchange.com/questions/127027/finding-an-a-heuristic-for-a-directed-graph)
+  * [Red Blob Games: Pathfinding & Heuristics in Game Programming](http://theory.stanford.edu/~amitp/GameProgramming/Heuristics.html#S7)  
