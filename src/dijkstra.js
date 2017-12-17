@@ -1,4 +1,4 @@
-import Draw from './draw';
+import { Graph } from './graph';
 
 // Uniform-cost search (UCS), one common variant of Dijkstra's algorithm that
 // 'inserts' nodes and terminates as soon as the target node is discovered.
@@ -23,11 +23,11 @@ import Draw from './draw';
 const PriorityQueue = require('js-priority-queue');
 
 class Dijkstra {
-  constructor(canvas, graph, source, target) {
-    this.draw = new Draw(canvas, canvas.getContext('2d'));
+  constructor(graph, source, target, draw) {
     this.graph = graph;
     this.source = source;
     this.target = target;
+    this.draw = draw;
 
     // 1: performing search, 0: waiting to search
     this.searching = 0;
@@ -37,10 +37,10 @@ class Dijkstra {
     this.previous = {};
     this.distances = {};
 
-    // use a priority queue in which vertices are sorted by their increasing cost
-    const compareDistances = (node1, node2) => {
-      return this.distances[node1] - this.distances[node2];
-    };
+    // use a priority queue in which vertices are sorted by their increasing cost (edge weights)
+    const compareDistances = (node1, node2) => (
+      this.distances[node1] - this.distances[node2]
+    );
     this.priorityQueue = new PriorityQueue({ comparator: compareDistances });
   }
 
@@ -49,6 +49,7 @@ class Dijkstra {
     const graph = this.graph;
     const source = this.source;
     const target = this.target;
+    const draw = this.draw;
     const priorityQueue = this.priorityQueue;
     const distances = this.distances;
     const previous = this.previous;
@@ -96,7 +97,7 @@ class Dijkstra {
             // PQ, but it's not absolutely necessary and dupes are uncommon.
             // re-queuing the node will not negatively affect the result or runtime.
             priorityQueue.queue(neighborKey);
-            
+
             distances[neighborKey] = distanceToNeighborNode;
             previous[neighborKey] = [[neighborEdge, currentNode]];
           }
@@ -104,31 +105,18 @@ class Dijkstra {
           // if one of the neighbors is the target, break & draw the path
           if (neighborKey === target) {
             clearInterval(timer);
-            return this.shortestPath();
+            return Graph.reconstructPath.bind(this)(source, target, previous, draw);
           }
-          console.log(distances);
         }
       } else {
-        // else if target is not in the graph <- MSTs connect all vertices.
+        // else if target is not in the graph - MSTs connect all vertices.
         clearInterval(timer);
         return console.log('no solution in this direction');
       }
     }, 10);
-    // allow choosing new search type while a search is running: return access to
-    // setInterval ID to permit clearInterval if calling generateMaze() during a search
+    // allow choosing a new search type while a search is already running:
+    // return access to setInterval ID to permit clearInterval
     return timer;
-  }
-
-  shortestPath() {
-    let predecessor = this.target;
-    while (predecessor !== this.source) {
-      this.draw.drawPath(this.previous[predecessor], 'solution', true);
-      const previousNode = this.previous[predecessor][0];
-      predecessor = previousNode[1];
-    }
-    // redraw start & end on the solution backtrace to overlap the path for visibility
-    this.draw.drawEnds([this.source, this.target]);
-    this.searching = 0;
   }
 }
 

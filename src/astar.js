@@ -1,13 +1,13 @@
-import Draw from './draw';
+import { Graph } from './graph';
 
 const PriorityQueue = require('js-priority-queue');
 
 class AStar {
-  constructor(canvas, graph, source, target) {
-    this.draw = new Draw(canvas, canvas.getContext('2d'));
+  constructor(graph, source, target, draw) {
     this.graph = graph;
     this.source = source;
     this.target = target;
+    this.draw = draw;
 
     // 1: performing search, 0: waiting to search
     this.searching = 0;
@@ -16,14 +16,14 @@ class AStar {
     // only keep the parent node that contributes to the cheapest cost (shortest distance)
     this.previous = {};
     this.distances = {};
-    this.prios = {};
+    this.scores = {};
 
     // use a priority queue in which vertices are sorted by their increasing cost
-    // including the heuristic (part heuristic part edge). A Star is a best-first
-    // search - it chooses the most promising node based on a two-parted cost function
-    const compareDistances = (node1, node2) => {
-      return this.prios[node1] - this.prios[node2];
-    };
+    // (cumulative edge cost + heuristic distance). A Star is a best-first search,
+    // it chooses the most promising node based on this two-parted cost function
+    const compareDistances = (node1, node2) => (
+      this.scores[node1] - this.scores[node2]
+    );
     this.priorityQueue = new PriorityQueue({ comparator: compareDistances });
   }
 
@@ -48,9 +48,11 @@ class AStar {
     const graph = this.graph;
     const source = this.source;
     const target = this.target;
+    const draw = this.draw;
     const priorityQueue = this.priorityQueue;
     const distances = this.distances;
     const previous = this.previous;
+    const scores = this.scores;
 
     // initialize the PQ with the stringified source node and insert new nodes when
     // they are visited. if the next node is in the Q, decrease its
@@ -102,9 +104,7 @@ class AStar {
 
             distances[neighborKey] = distanceToNeighborNode;
             const priority = this.constructor.manhattanDistance(neighborKey, target);
-            console.log(`prio: ${priority}`);
-            console.log(`dist: ${distanceToNeighborNode}`);
-            this.prios[neighborKey] = distances[neighborKey] + priority;
+            this.scores[neighborKey] = distances[neighborKey] + priority;
 
             previous[neighborKey] = [[neighborEdge, currentNode]];
           }
@@ -112,7 +112,7 @@ class AStar {
           // if one of the neighbors is the target, break & draw the path
           if (neighborKey === target) {
             clearInterval(timer);
-            return this.shortestPath();
+            return Graph.reconstructPath.bind(this)(source, target, previous, draw);
           }
         }
       } else {
@@ -120,21 +120,9 @@ class AStar {
         clearInterval(timer);
       }
     }, 10);
-    // allow choosing new search type while a search is running: return access to
-    // setInterval ID to permit clearInterval if calling generateMaze() during a search
+    // allow choosing a new search type while a search is already running:
+    // return access to setInterval ID to permit clearInterval
     return timer;
-  }
-
-  shortestPath() {
-    let predecessor = this.target;
-    while (predecessor !== this.source) {
-      this.draw.drawPath(this.previous[predecessor], 'solution', true);
-      const previousNode = this.previous[predecessor][0];
-      predecessor = previousNode[1];
-    }
-    // redraw start & end on the solution backtrace to overlap the path for visibility
-    this.draw.drawEnds([this.source, this.target]);
-    this.searching = 0;
   }
 }
 

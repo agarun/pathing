@@ -1,11 +1,12 @@
-import Draw from './draw';
+import { Graph } from './graph';
 
 class BreadthFirstSearch {
-  constructor(canvas, graph, source, target) {
-    this.draw = new Draw(canvas, canvas.getContext('2d'));
+  constructor(graph, source, target, draw) {
     this.graph = graph;
     this.source = source;
     this.target = target;
+    this.draw = draw;
+
     this.queue = [];
 
     // limited spanning tree object used solely for path information
@@ -20,6 +21,7 @@ class BreadthFirstSearch {
     const graph = this.graph;
     const source = this.source;
     const target = this.target;
+    const draw = this.draw;
     const queue = this.queue;
     const meta = this.meta;
 
@@ -49,7 +51,7 @@ class BreadthFirstSearch {
           if (neighborKey === target) {
             meta[neighborKey] = [[neighborEdge, currentNode]];
             clearInterval(timer);
-            return this.path();
+            return Graph.reconstructPath.bind(this)(source, target, meta, draw);
           }
 
           if (!neighbor.visited) {
@@ -59,26 +61,14 @@ class BreadthFirstSearch {
           }
         }
       } else {
-        // else if target is not in the graph <- MSTs connect all vertices.
+        // else if target is not in the graph - MSTs connect all vertices.
         clearInterval(timer);
         return console.log('no solution in this direction');
       }
     }, 7);
-    // allow choosing a new search while another search is running:
-    // return access to setInterval ID to permit clearInterval on that ID
+    // allow choosing a new search type while a search is already running:
+    // return access to setInterval ID to permit clearInterval
     return timer;
-  }
-
-  path() {
-    let predecessor = this.target;
-    while (predecessor !== this.source) {
-      this.draw.drawPath(this.meta[predecessor], 'solution', true);
-      const previousNode = this.meta[predecessor][0];
-      predecessor = previousNode[1];
-    }
-    // redraw start & end on the solution backtrace to overlap the path for visibility
-    this.draw.drawEnds([this.source, this.target]);
-    this.searching = 0;
   }
 }
 
