@@ -1,6 +1,7 @@
 import { Graph, Node, Edge } from './graph';
 import Draw from './draw';
 import CNS from './constants';
+import DOMHelper from './dom';
 
 class MazeGenerator {
   constructor(canvas) {
@@ -119,7 +120,7 @@ class MazeGenerator {
     const firstNode = this.graph.collection[0][0];
     this.graph.collection[0][0].discovered = true;
     this.draw.drawNode(firstNode, null, CNS.PRIMSCOLORS[0.00]);
-    this.image = 0;
+    this.image = null;
 
     // the top-left corner is 'walled' in by 1 southern cell & 1 eastern cell
     // visit either based on random weight: randomized prim's chooses lowest edge weight
@@ -138,17 +139,10 @@ class MazeGenerator {
       if (this.tree.progress === CNS.PROGRESS) { // every node in graph.collection is discovered
         clearInterval(timer);
         this.image = this.ctx.getImageData(0, 0, CNS.WIDTH, CNS.HEIGHT);
-        this.buttonColorFill();
+        DOMHelper.buttonColorFill();
       }
     }, time);
     return timer; // access to setInterval ID to permit clearInterval in other scopes
-  }
-
-  buttonColorFill() {
-    ['bfs', 'dfs', 'dijkstra', 'astar'].forEach((id) => {
-      document.getElementById(id).classList.remove('disabled');
-      document.getElementById(id).classList.add('search-btn');
-    });
   }
 }
 
