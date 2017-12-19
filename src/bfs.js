@@ -51,6 +51,7 @@ class BreadthFirstSearch {
           if (neighborKey === target) {
             meta[neighborKey] = [[neighborEdge, currentNode]];
             clearInterval(timer);
+            this.id = 'bfs';
             return Graph.reconstructPath.bind(this)(source, target, meta, draw);
           }
 

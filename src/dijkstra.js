@@ -105,6 +105,7 @@ class Dijkstra {
           // if one of the neighbors is the target, break & draw the path
           if (neighborKey === target) {
             clearInterval(timer);
+            this.id = 'dijkstra';
             return Graph.reconstructPath.bind(this)(source, target, previous, draw);
           }
         }

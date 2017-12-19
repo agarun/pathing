@@ -104,7 +104,7 @@ class AStar {
 
             distances[neighborKey] = distanceToNeighborNode;
             const priority = this.constructor.manhattanDistance(neighborKey, target);
-            this.scores[neighborKey] = distances[neighborKey] + priority;
+            scores[neighborKey] = distances[neighborKey] + priority;
 
             previous[neighborKey] = [[neighborEdge, currentNode]];
           }
@@ -112,6 +112,7 @@ class AStar {
           // if one of the neighbors is the target, break & draw the path
           if (neighborKey === target) {
             clearInterval(timer);
+            this.id = 'astar';
             return Graph.reconstructPath.bind(this)(source, target, previous, draw);
           }
         }

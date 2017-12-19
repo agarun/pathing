@@ -57,6 +57,7 @@ class DepthFirstSearch {
             this.draw.drawNode(neighborKey);
             meta[neighborKey] = [[neighborEdge, currentNode]];
             clearInterval(timer);
+            this.id = 'dfs';
             return Graph.reconstructPath.bind(this)(source, target, meta, draw);
           }
 
