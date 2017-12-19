@@ -2,7 +2,12 @@ main {
   padding-top: $canvas-top-height;
   padding-left: 300px;
 
+  .canvas {
+    height: 680px;
+  }
+
   canvas {
+    position: absolute;
     animation-duration: 0.2s;
     animation-name: fadeInLeft;
 

@@ -1,0 +1,40 @@
+#past-searches {
+  max-width: 500px;
+
+  h1 {
+    display: inline;
+    margin-right: 10px;
+    padding: 0.2em 0;
+    color: #656193;
+    text-align: left;
+    font-size: 1.2em;
+    font-weight: bold;
+    font-family: 'Montserrat', sans-serif;
+    letter-spacing: 0.015em;
+    text-transform: lowercase;
+    cursor: default;
+    &:hover {
+      color: white;
+
+      // when you hover over the h1, all the past-search buttons highlight as well
+      .past-search-btn {
+        color: white;
+      }
+    }
+  }
+}
+
+.past-search-btn {
+  padding-bottom: 1px;
+  padding: 8px 12px 10px 12px;
+  letter-spacing: 0.05em;
+  font-weight: bold;
+  color: gray;
+  background-color: $rich-purple;
+  transition: 50ms ease-in;
+  box-shadow: none;
+}
+
+.past-search-btn:hover {
+  color: white;
+}
