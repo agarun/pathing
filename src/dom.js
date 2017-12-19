@@ -23,7 +23,7 @@ const DOMHelper = {
   addPreviousSearch(search) {
     const canvasHistory = document.getElementById('canvas-history');
     const historyCtx = canvasHistory.getContext('2d');
-    const newHistory = document.createElement('button');
+    const newHistory = document.createElement('a');
     const finalSearchImage = document
       .getElementById('canvas')
       .getContext('2d')
