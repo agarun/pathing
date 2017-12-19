@@ -1,4 +1,5 @@
 import CNS from './constants';
+import DOMHelper from './dom';
 
 class Graph {
   constructor() {
@@ -13,8 +14,9 @@ class Graph {
       predecessor = previousNode;
     }
 
-    this.searching = 0;
-    draw.drawEnds([source, target]);
+    this.searching = 0; // solution path is complete: reset state!
+    draw.drawEnds([source, target]); // redraw endpoints over path
+    DOMHelper.addPreviousSearch(this); // close over completed canvas
   }
 }
 
