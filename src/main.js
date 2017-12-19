@@ -1,12 +1,24 @@
 import './scss/main.scss';
+import MazeGenerator from './generator';
 import BreadthFirstSearch from './bfs';
 import DepthFirstSearch from './dfs';
 import Dijkstra from './dijkstra';
 import AStar from './astar';
-import MazeGenerator from './generator';
+import DOMHelper from './dom';
 import Draw from './draw';
 import CNS from './constants';
 
+document.addEventListener('DOMContentLoaded', () => {
+  document.getElementById('search-nav').addEventListener('click', doSearch, false);
+  document.getElementById('generate').addEventListener('click', generateMaze, false);
+  document.getElementById('randomize').addEventListener('click', randomizeStartAndEnd, false);
+  DOMHelper.addMazeToggler();
+  generateMaze(); // begin drawing maze on page load
+}, false);
+
+const canvas = document.getElementById('canvas');
+const ctx = canvas.getContext('2d');
+const draw = new Draw(canvas, canvas.getContext('2d'));
 const searchTypes = {
   bfs: BreadthFirstSearch,
   dfs: DepthFirstSearch,
@@ -14,29 +26,8 @@ const searchTypes = {
   astar: AStar,
 };
 
-document.getElementById('search-nav').addEventListener('click', doSearch, false);
-document.getElementById('generate').addEventListener('click', generateMaze, false);
-document.getElementById('randomize').addEventListener('click', randomizeStartAndEnd, false);
-
-const canvas = document.getElementById('canvas');
 canvas.width = CNS.WIDTH;
 canvas.height = CNS.HEIGHT;
-const ctx = canvas.getContext('2d');
-const draw = new Draw(canvas, canvas.getContext('2d'));
-
-// begin drawing maze on page load
-// FIXME: settimeout on callback to delay
-document.addEventListener('DOMContentLoaded', () => generateMaze(), false);
-
-const toggleActive = (event) => {
-  if (event.target.getAttribute('class') === 'jump') {
-    document.querySelectorAll('.jump').forEach((anchor) => {
-      anchor.classList.toggle('active');
-    });
-  }
-};
-const classNameJump = document.getElementsByClassName('jump');
-Array.from(classNameJump, c => c.addEventListener('click', toggleActive, false));
 
 let graph;
 let minSpanTree;
@@ -48,7 +39,8 @@ let end;
 
 function generateMaze() {
   // flush the canvas
-  ctx.clearRect(0, 0, canvas.width, canvas.height);
+  ctx.fillStyle = CNS.BGCOLOR;
+  ctx.fillRect(0, 0, canvas.width, canvas.height);
 
   // if this isn't the first time running generateMaze(), cancel the last attempt
   clearInterval(intervalId);
@@ -56,7 +48,7 @@ function generateMaze() {
   // run randomized prim's algorithm to generate a maze
   const doPrims = function doPrims() {
     const maze = new MazeGenerator(canvas);
-    maze.grid();
+    maze.grid(); // FIXME: setupGrid();
     const timerId = maze.build();
     graph = maze;
     minSpanTree = maze.tree;
@@ -103,7 +95,11 @@ function randomizeStartAndEnd() {
   }
 }
 
+
+// impure
 function drawStartAndEnd() {
+  // if (!start || !end) defaultStartAndEnd();
+  // draw.drawEnds([start, end]);
   if (start === null || end === null) {
     defaultStartAndEnd();
   }
@@ -111,6 +107,7 @@ function drawStartAndEnd() {
   draw.drawEnds([start, end]);
 }
 
+// FIXME: why do i need to check .length !== undefined?
 // a search's running state is stored in an intervalId: clear any available ID
 // a node's `visited` state is stored on the node itself: force it to false
 function resetSearch() {
@@ -128,17 +125,19 @@ function doSearch(event) {
 
   // graph image exists when the maze has fully generated
   if (graph.image) {
-    resetSearch();
     ctx.putImageData(graph.image, 0, 0);
+    draw.resetState();
     drawStartAndEnd();
+    resetSearch();
 
     searchAlgorithm = new searchTypes[id](
-      canvas,
       minSpanTree,
       start,
       end,
+      draw,
     );
     intervalId = searchAlgorithm.search();
+    // promise ?
   } else {
     console.log("can't search before building a maze");
   }

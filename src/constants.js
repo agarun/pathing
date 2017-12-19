@@ -30,6 +30,7 @@ const PRIMSCOLORS = {
   0.90: '#1cfc7d', 0.95: '#1cfc7d', 1.00: '#1cfc7d',
 };
 
+const BGCOLOR = '#110b3c';
 const VISITCOLOR = 'rgba(249, 63, 44, 0.92)';
 const SOLUTIONCOLOR = '#ffe600';
 const STARTCOLOR = '#4d9803';
@@ -45,6 +46,7 @@ export default {
   DIRECTIONS,
   PROGRESS,
   PRIMSCOLORS,
+  BGCOLOR,
   VISITCOLOR,
   SOLUTIONCOLOR,
   STARTCOLOR,
