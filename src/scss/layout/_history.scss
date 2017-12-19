@@ -5,34 +5,40 @@
     display: inline;
     margin-right: 10px;
     padding: 0.2em 0;
+    position: relative;
+    bottom: -1px;
     color: #656193;
     text-align: left;
-    font-size: 1.2em;
+    font-size: 1.3em;
     font-weight: bold;
     font-family: 'Montserrat', sans-serif;
     letter-spacing: 0.015em;
     text-transform: lowercase;
     cursor: default;
+
     &:hover {
       color: white;
-
-      // when you hover over the h1, all the past-search buttons highlight as well
-      .past-search-btn {
-        color: white;
-      }
+      text-decoration: underline;
     }
   }
 }
 
 .past-search-btn {
-  padding-bottom: 1px;
   padding: 8px 12px 10px 12px;
   letter-spacing: 0.05em;
   font-weight: bold;
+  font-size: 0.92em;
+  text-transform: : uppercase;
   color: gray;
   background-color: $rich-purple;
   transition: 50ms ease-in;
-  box-shadow: none;
+  cursor: pointer;
+  opacity: 0;
+  animation: fadeIn .3s linear forwards;
+}
+
+@keyframes fadeIn {
+  to { opacity: 1; }
 }
 
 .past-search-btn:hover {
