@@ -254,8 +254,7 @@ main {
     text-transform: lowercase;
     cursor: default; }
     #past-searches h1:hover {
-      color: white;
-      text-decoration: underline; }
+      color: white; }
 
 .past-search-btn {
   padding: 8px 12px 10px 12px;
@@ -275,6 +274,7 @@ main {
     opacity: 1; } }
 
 .past-search-btn:hover {
-  color: white; }
+  color: white;
+  text-decoration: underline; }
 
 /*# sourceMappingURL=data:application/json;charset=utf-8;base64,eyJ2ZXJzaW9uIjozLCJzb3VyY2VzIjpbXSwibmFtZXMiOltdLCJtYXBwaW5ncyI6IiIsImZpbGUiOiJtYWluLmNzcyIsInNvdXJjZVJvb3QiOiIifQ==*/

@@ -95,18 +95,11 @@ function randomizeStartAndEnd() {
   }
 }
 
-// impure
 function drawStartAndEnd() {
-  // if (!start || !end) defaultStartAndEnd();
-  // draw.drawEnds([start, end]);
-  if (start === null || end === null) {
-    defaultStartAndEnd();
-  }
-  // redraw start & end so they overlap on the canvas
+  if (!start || !end) defaultStartAndEnd();
   draw.drawEnds([start, end]);
 }
 
-// FIXME: why do i need to check .length !== undefined?
 // a search's running state is stored in an intervalId: clear any available ID
 // a node's `visited` state is stored on the node itself: force it to false
 function resetSearch() {
