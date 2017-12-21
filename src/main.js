@@ -95,7 +95,6 @@ function randomizeStartAndEnd() {
   }
 }
 
-
 // impure
 function drawStartAndEnd() {
   // if (!start || !end) defaultStartAndEnd();
@@ -137,7 +136,6 @@ function doSearch(event) {
       draw,
     );
     intervalId = searchAlgorithm.search();
-    // promise ?
   } else {
     console.log("can't search before building a maze");
   }

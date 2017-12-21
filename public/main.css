@@ -243,6 +243,8 @@ main {
     display: inline;
     margin-right: 10px;
     padding: 0.2em 0;
+    position: relative;
+    bottom: -1px;
     color: #656193;
     text-align: left;
     font-size: 1.3em;
@@ -252,13 +254,15 @@ main {
     text-transform: lowercase;
     cursor: default; }
     #past-searches h1:hover {
-      color: white; }
+      color: white;
+      text-decoration: underline; }
 
 .past-search-btn {
   padding: 8px 12px 10px 12px;
   letter-spacing: 0.05em;
   font-weight: bold;
-  text-decoration: uppercase;
+  font-size: 0.92em;
+  text-transform: uppercase;
   color: gray;
   background-color: #110b3c;
   transition: 50ms ease-in;
