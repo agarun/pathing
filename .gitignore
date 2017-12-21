@@ -58,5 +58,6 @@ typings/
 .env
 
 # Custom
-webpack
 .sass-cache
+bundle.js
+bundle.js.map
