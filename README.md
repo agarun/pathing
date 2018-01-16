@@ -52,8 +52,6 @@ Both BFS and DFS have simple iterative implementations. BFS makes use of a queue
 
 ## Plans
 
-- See previous searches
-- Implement ES6 Promises
 - Visualize the graph during generation and traversal using [Sigma.js](http://sigmajs.org/)
 - Implement a min-heap for randomized Prim's algorithm
 - Implement hexagonal maze generation ([introduction to hexagonal grids](https://www.redblobgames.com/grids/hexagons/))
