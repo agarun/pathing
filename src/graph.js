@@ -3,7 +3,7 @@ import DOMHelper from './dom';
 
 class Graph {
   constructor() {
-    this.collection = []; // collection of nodes
+    this.collection = [];
   }
 
   static reconstructPath(source, target, pathData, draw) {

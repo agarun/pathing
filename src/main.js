@@ -70,9 +70,7 @@ function defaultStartAndEnd() {
 
 function randomizeStartAndEnd() {
   // prohibit changing start and end coordinates while a search is in progress
-  if (searchAlgorithm.searching) {
-    return console.log('wait for a search to terminate before choosing new endpoints');
-  }
+  if (searchAlgorithm.searching) return;
 
   // pick random start & end nodes with arbitrary bias by slicing
   const randomNodes = function randomNodes() {
@@ -129,7 +127,5 @@ function doSearch(event) {
       draw,
     );
     intervalId = searchAlgorithm.search();
-  } else {
-    console.log("can't search before building a maze");
   }
 }
