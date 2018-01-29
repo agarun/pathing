@@ -118,7 +118,7 @@ class AStar {
         }
       } else {
         // else if target is not in the graph <- MSTs connect all vertices.
-        clearInterval(timer);
+        return clearInterval(timer);
       }
     }, 10);
     // allow choosing a new search type while a search is already running:
