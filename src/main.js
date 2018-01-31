@@ -48,7 +48,7 @@ function generateMaze() {
   // run randomized prim's algorithm to generate a maze
   const doPrims = function doPrims() {
     const maze = new MazeGenerator(canvas);
-    maze.grid(); // FIXME: setupGrid();
+    maze.setupGrid();
     const timerId = maze.build();
     graph = maze;
     minSpanTree = maze.tree;
@@ -56,7 +56,6 @@ function generateMaze() {
   };
   intervalId = doPrims();
 
-  // TODO: possibly use resetSearchSettings() and resetSearchState()
   // reset all search states and flush start and end points (user can repeat searches)
   searchAlgorithm.searching = 0;
   [start, end] = [null, null];

@@ -22,7 +22,7 @@ class MazeGenerator {
     this.tree = {};
   }
 
-  grid() {
+  setupGrid() {
     // initialize & build the maze grid points
     // the grid points are coded in a `..-Node-Edge-Node-Edge-..` pattern
     // in each direction. the MST will be a subgraph of this pattern

@@ -19,7 +19,6 @@ const DIRECTIONS = {
 // setInterval() terminates when each node of NUMROWS & NUMCOLS is traversed
 const PROGRESS = ((WIDTH * HEIGHT) / (BLOCKWIDTH ** 2)) - 1;
 
-// TODO: const PATHCOLORS will draw the path to the target node with color progression
 const PRIMSCOLORS = {
   0.00: '#f5fff9', 0.05: '#e4feef', 0.10: '#dbf7e7',
   0.15: '#c9fade', 0.20: '#bcf7d6', 0.25: '#b2f6d0',
